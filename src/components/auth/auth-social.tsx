@@ -32,14 +32,14 @@ const AuthSocial = ({ disabled }: { disabled?: boolean }) => {
         return (
           <Button
             key={link.label}
-            className="flex items-center justify-center p-3 bg-border"
+            className="flex items-center justify-center p-3 bg-border hover:bg-border/60"
             full
             onClick={() =>
               handleSocialLogin(link.label === "google" ? "google" : "facebook")
             }
             disabled={disabled}
           >
-            <link.icon />
+            <link.icon className="w-6 h-6 text-blue-600" />
           </Button>
         );
       })}

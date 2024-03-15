@@ -27,11 +27,11 @@ export default async function RootLayout({
 
   return (
     <SessionProvider session={session}>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en">
         <body
           className={cn(
             montserrat.variable,
-            "antialiased flex flex-col min-h-screen bg-background"
+            "antialiased flex flex-col min-h-screen bg-background text-foreground"
           )}
         >
           <Navbar />

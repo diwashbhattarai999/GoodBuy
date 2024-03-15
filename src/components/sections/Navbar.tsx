@@ -14,6 +14,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 
 import Container from "@/components/max-width-container";
 import MobileMenu from "@/components/ui/mobile-menu";
+import { User } from "next-auth";
 
 interface NavbarProps {}
 
@@ -24,7 +25,6 @@ const Navbar = ({}: NavbarProps) => {
   const navRef = useRef<HTMLElement>(null);
 
   const pathname = usePathname().split("/")[1];
-  console.log(pathname);
 
   const handleMenu = () => {
     setIsMenuOpen((currentValue) => !currentValue);
@@ -44,14 +44,14 @@ const Navbar = ({}: NavbarProps) => {
   return (
     <nav
       ref={navRef}
-      className="h-[62px] border-b border-b-border backdrop-blur dark:bg-[#070707]/90 bg-[#fcfcfc]/90  fixed w-full top-0 z-40"
+      className="h-[62px] border-b border-b-border/50 backdrop-blur dark:bg-background/70 bg-background/70  fixed w-full top-0 z-40"
     >
       <Container className="flex items-center justify-between h-full">
         <Link
           href="/"
-          className="text-3xl font-bold tracking-tight text-foreground hover:text-primary-foreground"
+          className="text-3xl font-bold tracking-tight text-primary-foregroun"
         >
-          Good Buy
+          Good <span className="text-accent">Buy</span>
         </Link>
 
         <div className="flex gap-16 text-sm font-medium max-md:hidden lg:gap-24">
@@ -74,7 +74,7 @@ const Navbar = ({}: NavbarProps) => {
               <li>
                 <div
                   onClick={() => logout()}
-                  className="p-2 font-semibold transition duration-300 ease-linear rounded-md cursor-pointer hover:bg-muted"
+                  className="p-2 transition duration-300 ease-linear rounded-md cursor-pointer hover:bg-muted"
                 >
                   SignOut
                 </div>
@@ -84,7 +84,9 @@ const Navbar = ({}: NavbarProps) => {
                 <li>
                   <Link
                     href="/login"
-                    className="p-2 font-semibold transition duration-300 ease-linear rounded-md hover:bg-muted"
+                    className={`p-2 rounded-md hover:bg-muted transition ease-linear duration-300 ${
+                      `/${pathname}` === "/login" && "bg-muted"
+                    }`}
                   >
                     SignIn
                   </Link>
@@ -93,7 +95,9 @@ const Navbar = ({}: NavbarProps) => {
                 <li>
                   <Link
                     href="/register"
-                    className="p-2 font-semibold transition duration-300 ease-linear rounded-md hover:bg-muted"
+                    className={`p-2 rounded-md hover:bg-muted transition ease-linear duration-300  ${
+                      `/${pathname}` === "/register" && "bg-muted"
+                    }`}
                   >
                     SignUp
                   </Link>
@@ -143,6 +147,7 @@ const Navbar = ({}: NavbarProps) => {
             isMenuOpen={isMenuOpen}
             setIsMenuOpen={setIsMenuOpen}
             pathname={pathname}
+            user={user}
           />
         </div>
       </Container>
