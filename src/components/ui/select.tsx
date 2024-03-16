@@ -7,7 +7,6 @@ import { LuChevronDown, LuTrash2, LuUserCog2 } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 
 import AddNewCategory from "@/components/ui/add-new-category";
-import { deleteCategory } from "@/actions/admin/skills";
 
 export type Options = {
   readonly value: string;
@@ -52,9 +51,10 @@ const Select = ({
   };
 
   const handleDelete = (option: Options) => {
-    deleteCategory(option.label)
-      .then((data) => console.log(data))
-      .catch(() => console.error("Something went wrong"));
+    // deleteCategory(option.label)
+    //   .then((data) => console.log(data))
+    //   .catch(() => console.error("Something went wrong"));
+    console.log(option.label);
   };
 
   return (
@@ -89,7 +89,7 @@ const Select = ({
         >
           {value}
         </div>
-        <LuChevronDown className="absolute right-2 cursor-pointer pr-4 h-9 w-9 text-secondary-foreground" />
+        <LuChevronDown className="absolute right-2 cursor-pointer pr-4 h-9 w-9 text-secondary-foreground " />
       </div>
       {error && <div className="mb-4 text-destructive italic">{error}</div>}
 
@@ -99,7 +99,7 @@ const Select = ({
 
       <div
         className={cn(
-          "w-full h-fit bg-input absolute left-0 top-24 my-2 rounded-md text-left duration-300 z-10",
+          "w-full h-fit bg-primary absolute left-0 top-24 my-2 py-2 rounded-md text-left duration-300 z-50",
           selectOpen
             ? "translate-y-0 opacity-100 pointer-events-auto"
             : "-translate-y-5 opacity-0 pointer-events-none"
@@ -108,13 +108,16 @@ const Select = ({
         {options.map((option) => (
           <div
             key={option.value}
-            className="py-2 hover:bg-ring cursor-pointer rounded-md px-10 duration-300 m-2 capitalize flex justify-between"
+            className="py-3 hover:bg-accent cursor-pointer rounded-md px-10 duration-300 m-2 capitalize flex justify-between group"
           >
-            <p onClick={() => handleSelect(option)} className="flex-1">
+            <p
+              onClick={() => handleSelect(option)}
+              className="flex-1 group-hover:text-primary"
+            >
               {option.label}
             </p>
             <LuTrash2
-              className="h-5 w-5 text-destructive"
+              className="h-5 w-5 text-destructive group-hover:text-primary"
               onClick={() => handleDelete(option)}
             />
           </div>

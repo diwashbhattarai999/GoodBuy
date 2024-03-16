@@ -14,7 +14,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 
 import Container from "@/components/max-width-container";
 import MobileMenu from "@/components/ui/mobile-menu";
-import { User } from "next-auth";
+import UserProfile from "../user-profile/user-profile";
 
 interface NavbarProps {}
 
@@ -134,10 +134,12 @@ const Navbar = ({}: NavbarProps) => {
                 Cart
               </Link>
             </li>
+
+            {user && <UserProfile />}
           </ul>
 
           <div
-            className="z-50 flex flex-col gap-1 px-2 py-1 duration-300 rounded-sm cursor-pointer md:hidden hover:bg-muted"
+            className="flex-col gap-1 px-2 py-1 duration-300 rounded-sm cursor-pointer lex md:hidden hover:bg-muted"
             onClick={handleMenu}
           >
             {isMenuOpen ? <CgClose size={24} /> : <CgMenuRight size={24} />}

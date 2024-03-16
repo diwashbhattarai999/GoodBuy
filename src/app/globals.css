@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -91,14 +92,5 @@
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
-  }
-
-  .bg-blur {
-    filter: blur(5px) brightness(0.7);
-    transition: all 0.3s ease;
-    pointer-events: none;
-    user-select: none;
-    position: relative;
-    z-index: -50;
   }
 }

@@ -1,10 +1,10 @@
 import Link from "next/link";
+import { IconType } from "react-icons/lib";
 
 import { cn } from "@/lib/utils";
 
 import Container from "@/components/max-width-container";
 import AuthSocial from "@/components/auth/auth-social";
-import { IconType } from "react-icons/lib";
 
 interface CardWrapperProps {
   children: React.ReactNode;

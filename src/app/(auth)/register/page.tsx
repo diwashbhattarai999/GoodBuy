@@ -1,7 +1,12 @@
+import AnimationWrapper from "@/components/animations/page-animation";
 import RegisterForm from "@/components/auth/register-form";
 
 const RegisterPage = () => {
-  return <RegisterForm />;
+  return (
+    <AnimationWrapper>
+      <RegisterForm />
+    </AnimationWrapper>
+  );
 };
 
 export default RegisterPage;

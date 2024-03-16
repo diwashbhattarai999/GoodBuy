@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
-import { auth } from "../auth";
+
+import { auth } from "@/auth";
 
 import { siteConfig } from "@/config";
+
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
+import "@uploadthing/react/styles.css";
+
 import Footer from "@/components/sections/Footer";
 import Navbar from "@/components/sections/Navbar";
 
