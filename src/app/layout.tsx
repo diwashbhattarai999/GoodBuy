@@ -38,11 +38,7 @@ export default async function RootLayout({
             "antialiased flex flex-col min-h-screen bg-background text-foreground"
           )}
         >
-          <Navbar />
-          <div className="flex flex-col min-h-screen">
-            <div className="flex-1 mt-[62px]">{children}</div>
-            <Footer />
-          </div>
+          {children}
         </body>
       </html>
     </SessionProvider>

@@ -8,7 +8,7 @@ import { IconType } from "react-icons/lib";
 import { cn } from "@/lib/utils";
 
 interface InputProps {
-  label: string;
+  label?: string;
   name: string;
   type: HTMLInputTypeAttribute;
   register: UseFormRegisterReturn;
@@ -41,16 +41,18 @@ const Input = ({
         disabled && "cursor-not-allowed opacity-50"
       )}
     >
-      <label
-        htmlFor={name}
-        className={cn(
-          "text-primary-foreground cursor-pointer",
-          error && "text-destructive opacity-80",
-          disabled && "cursor-not-allowed opacity-50"
-        )}
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          htmlFor={name}
+          className={cn(
+            "text-primary-foreground cursor-pointer",
+            error && "text-destructive opacity-80",
+            disabled && "cursor-not-allowed opacity-50"
+          )}
+        >
+          {label}
+        </label>
+      )}
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center w-full relative">
           {Icon && (

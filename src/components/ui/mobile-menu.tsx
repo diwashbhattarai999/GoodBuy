@@ -4,6 +4,7 @@ import { User } from "next-auth";
 import { logout } from "@/actions/logout";
 
 import { NAV_LINKS } from "@/constants";
+import { LuX } from "react-icons/lu";
 
 interface MobileMenuProps {
   isMenuOpen: boolean;
@@ -25,7 +26,7 @@ const MobileMenu = ({
         ${isMenuOpen ? "translate-x-0" : "translate-x-[100vw]"} 
     `}
     >
-      <ul className="flex flex-col items-start gap-8 pt-32 w-fit">
+      <ul className="flex flex-col items-center gap-4 pt-32 w-full">
         {NAV_LINKS.map((link) => {
           return (
             <li
@@ -33,12 +34,11 @@ const MobileMenu = ({
               onClick={() => {
                 setIsMenuOpen(false);
               }}
-              className="flex items-center justify-start gap-2"
+              className="flex items-center justify-start gap-2 w-full text-center"
             >
-              <div className="w-1 h-1 rounded-sm bg-muted-foreground/30" />
               <Link
                 href={link.path}
-                className={`p-2 font-medium rounded-md hover:text-secondary-foreground transition ease-linear duration-300 hover:bg-muted ${
+                className={`p-2 py-4 font-medium rounded-md hover:text-secondary-foreground transition ease-linear duration-300 hover:bg-muted w-full ${
                   `/${pathname}` === link.path.toLowerCase() && "bg-muted"
                 }`}
               >
@@ -49,14 +49,13 @@ const MobileMenu = ({
         })}
 
         {user ? (
-          <li className="flex items-center justify-start gap-2">
-            <div className="w-1 h-1 rounded-sm bg-muted-foreground/30" />
+          <li className="flex items-center justify-start text-center gap-2 w-full">
             <div
               onClick={() => {
                 logout();
                 setIsMenuOpen(false);
               }}
-              className="p-2 font-medium transition duration-300 ease-linear rounded-md cursor-pointer hover:bg-muted"
+              className="p-2 py-4 w-full font-medium transition duration-300 ease-linear rounded-md cursor-pointer hover:bg-muted"
             >
               SignOut
             </div>
@@ -64,7 +63,6 @@ const MobileMenu = ({
         ) : (
           <>
             <li className="flex items-center justify-start gap-2">
-              <div className="w-1 h-1 rounded-sm bg-muted-foreground/30" />
               <Link
                 href="/login"
                 className="p-2 font-medium transition duration-300 ease-linear rounded-md hover:bg-muted"
@@ -87,6 +85,11 @@ const MobileMenu = ({
           </>
         )}
       </ul>
+
+      <LuX
+        className="absolute top-4 right-4 w-10 h-10 text-primary-foreground hover:bg-muted p-2 rounded-md cursor-pointer duration-300"
+        onClick={() => setIsMenuOpen(false)}
+      />
     </div>
   );
 };
