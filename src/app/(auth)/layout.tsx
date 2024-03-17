@@ -1,6 +1,15 @@
+import Footer from "@/components/sections/Footer";
+import Navbar from "@/components/sections/Navbar";
+
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-full flex items-center justify-center">{children}</div>
+    <>
+      <Navbar />
+      <main className="flex flex-col min-h-screen">
+        <div className="flex-1 mt-[50px]">{children}</div>
+      </main>
+      <Footer />
+    </>
   );
 };
 

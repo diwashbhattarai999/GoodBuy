@@ -18,9 +18,11 @@ import MobileMenu from "@/components/ui/mobile-menu";
 import UserProfile from "@/components/user-profile/user-profile";
 import NavBanner from "@/components/sections//Banner";
 
-interface NavbarProps {}
+interface NavbarProps {
+  showNavBanner?: boolean;
+}
 
-const Navbar = ({}: NavbarProps) => {
+const Navbar = ({ showNavBanner }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
@@ -44,7 +46,7 @@ const Navbar = ({}: NavbarProps) => {
 
   return (
     <nav className=" border-b border-b-border/50 backdrop-blur dark:bg-background/70 bg-background/70 fixed w-full top-0 z-40">
-      <NavBanner />
+      {showNavBanner && <NavBanner />}
       <MaxWidthContainer>
         <div className="py-4 w-full flex items-center justify-between">
           <Link
@@ -116,7 +118,6 @@ const Navbar = ({}: NavbarProps) => {
                     placeholder="What are you looking for?"
                     className="w-60 py-1 pl-8 pr-2 bg-transparent border rounded-md text-primary-foreground placeholder:text-secondary-foreground outline-none disabled:cursor-not-allowed disabled:opacity-50 border-input focus:border-secondary-foreground max-lg:hidden"
                   />
-                  {/* <LuSearch className="lg:absolute left-2 top-2 lg:pointer-events-none max-lg:h-10 h-4 w-10 p-2 lg:p-0 lg:w-4 text-secondary-foreground cursor-pointer hover:bg-muted rounded-full duration-300" /> */}
                   <LuSearch className="lg:absolute lg:left-2 lg:top-2 lg:pointer-events-none max-lg:h-10 h-4 w-10 lg:w-4 text-secondary-foreground max-lg:cursor-pointer p-2 lg:p-0 max-lg:hover:bg-muted max-lg:rounded-full max-lg:duration-300" />
                 </div>
               </li>

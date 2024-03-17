@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 
 import { logout } from "@/actions/logout";
@@ -17,10 +17,14 @@ import {
 import MotionUserProfile from "../animations/user-profile-animation";
 import ProfileSettings from "./profile-settings";
 import { useRouter } from "next/navigation";
+import useOnClickOutside from "@/hooks/use-on-click-outside";
+import { cn } from "@/lib/utils";
 
 const UserProfile = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isProfileSettingsOpen, setIsProfileSettingsOpen] = useState(false);
+
+  const userProfileRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
@@ -62,8 +66,12 @@ const UserProfile = () => {
     },
   ];
 
+  useOnClickOutside(userProfileRef, () => {
+    setIsProfileOpen(false);
+  });
+
   return (
-    <div className="relative">
+    <div ref={userProfileRef} className="relative">
       <Image
         src={user?.image || "/images/default-profile.png"}
         alt="profile"
@@ -72,40 +80,46 @@ const UserProfile = () => {
         className="rounded-full cursor-pointer h-9 w-9 group-hover:opacity-70"
         onClick={() => setIsProfileOpen((currValue) => !currValue)}
       />
-      {isProfileOpen && (
-        <MotionUserProfile className="absolute right-0 z-30 px-2 py-3 rounded-md shadow-sm w-52 top-14 bg-primary text-primary-foreground">
-          <ul className="flex flex-col gap-2">
-            <li>
-              <h3 className="px-2 py-3 font-medium rounded-md text-muted-foreground">
-                @{user?.email?.split("@")[0]}
-              </h3>
-            </li>
 
-            <hr className="bg-border" />
+      <div
+        className={cn(
+          "absolute right-0 z-30 px-2 py-3 rounded-md shadow-sm w-52 top-12 bg-primary text-primary-foreground duration-300",
+          isProfileOpen
+            ? "translate-y-0 opacity-100 pointer-events-auto"
+            : "-translate-y-5 opacity-0 pointer-events-none"
+        )}
+      >
+        <ul className="flex flex-col gap-2">
+          <li>
+            <h3 className="px-2 py-3 font-medium rounded-md text-muted-foreground">
+              @{user?.email?.split("@")[0]}
+            </h3>
+          </li>
 
-            {MENU_ITEMS.map((item, index) => {
-              return (
-                <li
-                  key={index}
-                  onClick={item.onClick}
-                  className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer hover:bg-popover"
-                >
-                  <item.icon className="w-auto py-3 h-11" />
-                  <h3>{item.label}</h3>
-                </li>
-              );
-            })}
+          <hr className="bg-border" />
 
-            <li
-              onClick={handleLogout}
-              className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer hover:bg-popover"
-            >
-              <LuLogOut className="w-auto py-3 h-11" />
-              <h3>Logout</h3>
-            </li>
-          </ul>
-        </MotionUserProfile>
-      )}
+          {MENU_ITEMS.map((item, index) => {
+            return (
+              <li
+                key={index}
+                onClick={item.onClick}
+                className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer hover:bg-popover"
+              >
+                <item.icon className="w-auto py-3 h-11" />
+                <h3>{item.label}</h3>
+              </li>
+            );
+          })}
+
+          <li
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer hover:bg-popover"
+          >
+            <LuLogOut className="w-auto py-3 h-11" />
+            <h3>Logout</h3>
+          </li>
+        </ul>
+      </div>
 
       <ProfileSettings
         isProfileSettingsOpen={isProfileSettingsOpen}

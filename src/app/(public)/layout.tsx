@@ -8,9 +8,9 @@ export default async function HomeLayout({
 }>) {
   return (
     <>
-      <Navbar />
+      <Navbar showNavBanner />
       <main className="flex flex-col min-h-screen">
-        <div className="flex-1 mt-[62px]">{children}</div>
+        <div className="flex-1 mt-[150px]">{children}</div>
         <Footer />
       </main>
     </>
