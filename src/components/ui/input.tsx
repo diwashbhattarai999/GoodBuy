@@ -61,13 +61,7 @@ const Input = ({
           <input
             {...register}
             name={name}
-            type={
-              type == "password"
-                ? passwordVisible
-                  ? "string"
-                  : "password"
-                : type
-            }
+            type={type === "password" && passwordVisible ? "text" : type}
             placeholder={placeholder}
             defaultValue={value}
             id={name}

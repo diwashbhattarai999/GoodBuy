@@ -33,6 +33,10 @@ export const RegisterSchema = z
       .trim()
       .min(1, { message: "Email is required" })
       .email({ message: "Please provide a valid email" }),
+    role: z.enum([UserRole.VENDOR, UserRole.USER]),
+    companyName: z.optional(z.string()),
+    panNo: z.optional(z.number()),
+
     password: z
       .string()
       .trim()
@@ -79,7 +83,7 @@ export const SettingsSchema = z
     image: z.optional(z.string()),
     name: z.optional(z.string()),
     isTwoFactorEnabled: z.optional(z.boolean()),
-    role: z.enum([UserRole.ADMIN, UserRole.USER]),
+    role: z.enum([UserRole.VENDOR, UserRole.USER]),
     email: z.optional(z.string().email()),
     password: z.optional(z.string()),
     newPassword: z.optional(z.string()),

@@ -13,6 +13,7 @@ import {
   LuUserCircle2,
 } from "react-icons/lu";
 import { useSession } from "next-auth/react";
+import { AnimatePresence } from "framer-motion";
 
 import { settings } from "@/actions/settings";
 
@@ -28,7 +29,8 @@ import FormError from "@/components/ui/form-error";
 import FormSuccess from "@/components/ui/form-success";
 import ChangeProfileImg from "@/components/user-profile/change-profile";
 import AnimationWrapper from "@/components/animations/page-animation";
-import { AnimatePresence } from "framer-motion";
+import { UserRole } from "@prisma/client";
+import { cn } from "@/lib/utils";
 
 interface SettingsFormProp {
   isEdit: boolean;
@@ -51,7 +53,12 @@ const SettingsForm = ({ isEdit, setIsEdit }: SettingsFormProp) => {
     email: user?.email || undefined,
     password: undefined,
     newPassword: undefined,
-    role: user?.role || undefined,
+    role:
+      user?.role === "USER"
+        ? UserRole.USER
+        : user?.role == user?.role
+        ? UserRole.VENDOR
+        : undefined,
     isTwoFactorEnabled: user?.isTwoFactorEnabled || undefined,
   };
 
@@ -68,12 +75,12 @@ const SettingsForm = ({ isEdit, setIsEdit }: SettingsFormProp) => {
     setValue,
   } = useForm<z.infer<typeof SettingsSchema>>({
     resolver: zodResolver(SettingsSchema),
-    defaultValues: defaultValues,
+    defaultValues,
   });
 
   const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
     startTransition(() => {
-      console.log(values);
+      // console.log(values);
       settings(values)
         .then((data) => {
           if (data.error) {
@@ -91,9 +98,14 @@ const SettingsForm = ({ isEdit, setIsEdit }: SettingsFormProp) => {
   };
 
   return (
-    <>
+    <div className="overflow-y-scroll h-screen w-full py-14 no-scrollbar">
       <div className="flex w-full items-center justify-between">
-        <h1 className="text-2xl font-semibold py-2 text-center border-b border-b-border w-fit">
+        <h1
+          className={cn(
+            "text-2xl font-semibold py-2 text-left border-b border-b-border",
+            isEdit ? "w-fit" : "w-full"
+          )}
+        >
           User Profile
         </h1>
         {isEdit && (
@@ -181,8 +193,8 @@ const SettingsForm = ({ isEdit, setIsEdit }: SettingsFormProp) => {
                 disabled={isPending}
                 register={register("role")}
                 options={[
-                  { label: "Admin", value: "ADMIN" },
                   { label: "User", value: "USER" },
+                  { label: "Vendor", value: "VENDOR" },
                 ]}
               />
 
@@ -243,7 +255,7 @@ const SettingsForm = ({ isEdit, setIsEdit }: SettingsFormProp) => {
           </div>
         </AnimationWrapper>
       )}
-    </>
+    </div>
   );
 };
 

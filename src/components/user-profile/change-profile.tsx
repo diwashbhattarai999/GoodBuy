@@ -12,7 +12,7 @@ interface ChangeProfileImgProps {
   value?: string;
   setValue?: UseFormSetValue<{
     image?: string | undefined;
-    role: "ADMIN" | "USER";
+    role: "VENDOR" | "USER";
     name?: string | undefined;
     isTwoFactorEnabled?: boolean | undefined;
     email?: string | undefined;

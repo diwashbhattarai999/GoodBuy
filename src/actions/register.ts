@@ -11,14 +11,17 @@ import { generateVerificationToken } from "@/lib/tokens";
 
 import { getUserByEmail } from "@/data/user";
 
-export const register = async (values: z.infer<typeof RegisterSchema>) => {
+export const registerAction = async (
+  values: z.infer<typeof RegisterSchema>
+) => {
   const validatedFields = RegisterSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: "Invalid fields!" };
   }
 
-  const { email, name, password, confirmPassword } = validatedFields.data;
+  const { email, name, password, confirmPassword, role, companyName, panNo } =
+    validatedFields.data;
 
   if (password !== confirmPassword) {
     return { error: "Passwords do not match!" };
@@ -36,6 +39,9 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     data: {
       name,
       email,
+      role,
+      companyName,
+      panNo,
       password: hashedPassword,
     },
   });

@@ -8,6 +8,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LuKeyRound, LuMail, LuHash } from "react-icons/lu";
+import { UserRole } from "@prisma/client";
 
 import { login } from "@/actions/login";
 
@@ -19,7 +20,7 @@ import FormError from "@/components/ui/form-error";
 import FormSuccess from "@/components/ui/form-success";
 import CardWrapper from "@/components/ui/card-wrapper";
 
-const defaultValues = {
+const defaultValues: z.infer<typeof LoginSchema> = {
   email: "",
   password: "",
 };

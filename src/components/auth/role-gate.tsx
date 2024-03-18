@@ -21,6 +21,8 @@ export const RoleGate = ({
   backButtonHref,
 }: RoleGateProps) => {
   const role = useCurrentRole();
+  console.log(role, allowedRole);
+
   if (role && !allowedRole.includes(role)) {
     return (
       <ErrorCard

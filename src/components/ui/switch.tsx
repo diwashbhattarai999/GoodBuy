@@ -13,7 +13,7 @@ interface SwitchProps {
   value?: boolean;
   setValue: UseFormSetValue<{
     image?: string | undefined;
-    role: "ADMIN" | "USER";
+    role: "USER" | "VENDOR";
     name?: string | undefined;
     isTwoFactorEnabled?: boolean | undefined;
     email?: string | undefined;

@@ -17,7 +17,7 @@ interface SelectProps {
   name: string;
   register: UseFormRegisterReturn;
   value: string;
-  setSelectValue: React.Dispatch<React.SetStateAction<string>>;
+  setSelectValue: React.Dispatch<React.SetStateAction<any>>;
   error?: string;
   disabled?: boolean;
   options: Options[];
@@ -25,7 +25,6 @@ interface SelectProps {
   props?: ReactPropTypes;
   className?: string;
   selectLabel: string;
-  showAddNewButton?: boolean;
 }
 
 const Select = ({
@@ -40,7 +39,6 @@ const Select = ({
   props,
   className,
   selectLabel,
-  showAddNewButton,
 }: SelectProps) => {
   const [selectOpen, setSelectOpen] = useState(false);
 
@@ -50,15 +48,13 @@ const Select = ({
     setSelectOpen(false);
   };
 
-  const handleDelete = (option: Options) => {
-    // deleteCategory(option.label)
-    //   .then((data) => console.log(data))
-    //   .catch(() => console.error("Something went wrong"));
-    console.log(option.label);
-  };
-
   return (
-    <div className="w-full relative mb-8 flex flex-col items-start gap-2">
+    <div
+      className={cn(
+        "w-full relative mb-8 flex flex-col items-start gap-2 ",
+        disabled && "cursor-not-allowed opacity-50"
+      )}
+    >
       <label
         htmlFor="SelectRole"
         className={cn(
@@ -93,13 +89,9 @@ const Select = ({
       </div>
       {error && <div className="mb-4 text-destructive italic">{error}</div>}
 
-      {showAddNewButton && (
-        <AddNewCategory options={options} setOptions={setOptions} />
-      )}
-
       <div
         className={cn(
-          "w-full h-fit bg-primary absolute left-0 top-24 my-2 py-2 rounded-md text-left duration-300 z-50",
+          "w-full h-fit bg-card absolute left-0 top-24 my-2 py-2 rounded-md text-left duration-300 z-50",
           selectOpen
             ? "translate-y-0 opacity-100 pointer-events-auto"
             : "-translate-y-5 opacity-0 pointer-events-none"
@@ -108,7 +100,7 @@ const Select = ({
         {options.map((option) => (
           <div
             key={option.value}
-            className="py-3 hover:bg-accent cursor-pointer rounded-md px-10 duration-300 m-2 capitalize flex justify-between group"
+            className="py-3 hover:bg-accent/60 cursor-pointer rounded-md px-10 duration-300 m-2 capitalize flex justify-between group"
           >
             <p
               onClick={() => handleSelect(option)}
@@ -116,10 +108,6 @@ const Select = ({
             >
               {option.label}
             </p>
-            <LuTrash2
-              className="h-5 w-5 text-destructive group-hover:text-primary"
-              onClick={() => handleDelete(option)}
-            />
           </div>
         ))}
       </div>

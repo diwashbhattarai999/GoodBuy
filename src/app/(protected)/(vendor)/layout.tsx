@@ -4,14 +4,14 @@ import { RoleGate } from "@/components/auth/role-gate";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 
-export default function ProtectedLayout({
+export default function VendorLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <RoleGate
-      allowedRole={[UserRole.USER, UserRole.ADMIN, UserRole.VENDOR]}
+      allowedRole={[UserRole.VENDOR]}
       backButtonHref="/"
       backButtonLabel="Go to Home"
     >
