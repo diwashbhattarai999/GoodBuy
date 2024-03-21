@@ -35,7 +35,7 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        "bg-primary md:rounded-r-2xl h-fit md:h-screen md:overflow-y-scroll overflow-x-visible no-scrollbar p-5 md:pl-8 md:pr-4 md:py-10 md:cursor-pointer md:transition-all md:duration-500 flex md:flex-col items-center md:items-start justify-between z-20 left-0 w-full sticky top-0 md:left-0",
+        "bg-primary md:rounded-r-2xl h-fit md:h-screen md:overflow-y-scroll overflow-x-visible no-scrollbar p-5 md:pl-8 md:pr-4 md:py-10 md:transition-all md:duration-500 flex md:flex-col items-center md:items-start justify-between z-20 left-0 w-full sticky top-0 md:left-0",
         expandSidebar ? "md:w-[270px]" : "md:w-28"
       )}
     >
