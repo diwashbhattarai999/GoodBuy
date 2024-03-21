@@ -31,6 +31,7 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Review    Review[]
 }
 
 model Account {
@@ -87,4 +88,131 @@ model TwoFactorConfirmation {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])
+}
+
+model Product {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String
+  brand         String?
+  slug          String          @unique
+  category      Category        @relation(fields: [categoryId], references: [id])
+  categoryId    String          @db.ObjectId
+  subCategories SubCategory[]
+  details       ProductDetail[]
+  questions     Question[]
+  reviews       Review[]
+  refundPolicy  String?         @default("30 days")
+  rating        Float           @default(0)
+  numReviews    Int             @default(0)
+  shipping      Float
+  subProducts   SubProduct[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SubProduct {
+  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
+  sku                String
+  images             Image[] @relation(name: "SubProductImages")
+  description_images Image[] @relation(name: "DescriptionImages")
+  color              Style   @relation(fields: [styleId], references: [id])
+  sizes              Size[]
+  discount           Float   @default(0)
+  sold               Int     @default(0)
+  product            Product @relation(fields: [productId], references: [id])
+  productId          String  @db.ObjectId
+  styleId            String  @db.ObjectId
+}
+
+model Category {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Product     Product[]
+  SubCategory SubCategory[]
+}
+
+model SubCategory {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String   @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
+}
+
+model Size {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  size         String
+  qty          Int
+  price        Float
+  SubProduct   SubProduct? @relation(fields: [subProductId], references: [id])
+  subProductId String?     @db.ObjectId
+}
+
+model ProductDetail {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  value     String
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
+}
+
+model Question {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  question  String
+  answer    String
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?  @db.ObjectId
+}
+
+model Review {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  reviewBy   User     @relation(fields: [reviewById], references: [id])
+  reviewById String   @db.ObjectId
+  rating     Int      @default(0)
+  review     String
+  size       String?
+  style      Style?   @relation(fields: [styleId], references: [id])
+  styleId    String   @db.ObjectId
+  fit        String
+  images     Image[]
+  likes      Like[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Product    Product? @relation(fields: [productId], references: [id])
+  productId  String?  @db.ObjectId
+}
+
+model Image {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  url          String
+  public_url   String
+  subProduct   SubProduct? @relation(fields: [subProductId], references: [id], name: "SubProductImages")
+  subProductId String?     @db.ObjectId
+  review       Review?     @relation(fields: [reviewId], references: [id])
+  reviewId     String?     @db.ObjectId
+  SubProduct   SubProduct? @relation(fields: [subProductId], references: [id], name: "DescriptionImages")
+}
+
+model Style {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  color      String
+  image      String
+  SubProduct SubProduct[]
+  Review     Review[]
+}
+
+model Like {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  likes    String
+  Review   Review? @relation(fields: [reviewId], references: [id])
+  reviewId String? @db.ObjectId
 }

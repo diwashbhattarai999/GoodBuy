@@ -12,6 +12,7 @@ import {
   LuShoppingBag,
   LuXCircle,
   LuStar,
+  LuLayoutDashboard,
 } from "react-icons/lu";
 
 import MotionUserProfile from "../animations/user-profile-animation";
@@ -19,6 +20,7 @@ import ProfileSettings from "./profile-settings";
 import { useRouter } from "next/navigation";
 import useOnClickOutside from "@/hooks/use-on-click-outside";
 import { cn } from "@/lib/utils";
+import { UserRole } from "@prisma/client";
 
 const UserProfile = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -95,6 +97,16 @@ const UserProfile = () => {
               @{user?.email?.split("@")[0]}
             </h3>
           </li>
+
+          {user?.role === UserRole.VENDOR && (
+            <li
+              onClick={() => router.push("/vendor/dashboard")}
+              className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer hover:bg-popover"
+            >
+              <LuLayoutDashboard className="w-auto py-3 h-11" />
+              <h3>Vendor Dashboard</h3>
+            </li>
+          )}
 
           <hr className="bg-border" />
 

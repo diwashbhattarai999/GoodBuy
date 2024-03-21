@@ -22,6 +22,7 @@ export default auth(async (req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isAdmin = nextUrl.pathname == "/admin";
+  const isVendor = nextUrl.pathname == "/vendor";
 
   if (isApiAuthRoute) return;
 
@@ -51,6 +52,10 @@ export default auth(async (req) => {
 
   if (isLoggedIn && user?.role !== UserRole.VENDOR) {
     return Response.redirect(new URL("/login", nextUrl));
+  }
+
+  if (isLoggedIn && isVendor) {
+    return Response.redirect(new URL("/vendor/dashboard", nextUrl));
   }
 });
 

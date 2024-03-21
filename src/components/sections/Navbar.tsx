@@ -45,7 +45,7 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
   const user = useCurrentUser();
 
   return (
-    <nav className=" border-b border-b-border/50 backdrop-blur dark:bg-background/70 bg-background/70 fixed w-full top-0 z-40">
+    <nav className=" border-b border-b-border/50 backdrop-blur dark:bg-background/90 bg-background/90 fixed w-full top-0 z-40">
       {showNavBanner && <NavBanner />}
       <MaxWidthContainer>
         <div className="py-4 w-full flex items-center justify-between">

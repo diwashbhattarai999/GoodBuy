@@ -1,4 +1,5 @@
 import HeroSection from "./heroSection";
+import Todays from "./todays";
 
 interface HomeProps {}
 
@@ -6,7 +7,7 @@ const Home = ({}: HomeProps) => {
   return (
     <>
       <HeroSection />
-      {/* TODAY'S */}
+      <Todays />
       {/* BROWSE BY CATEGORY */}
       {/* BEST SELLING PRODUCT */}
       {/* BUY NOW BANNER WITH TIMER */}
