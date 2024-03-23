@@ -7,6 +7,7 @@ import { LuChevronDown, LuTrash2, LuUserCog2 } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 
 import AddNewCategory from "@/components/ui/add-new-category";
+import { IconType } from "react-icons/lib";
 
 export type Options = {
   readonly value: string;
@@ -25,6 +26,7 @@ interface SelectProps {
   props?: ReactPropTypes;
   className?: string;
   selectLabel: string;
+  Icon?: IconType;
 }
 
 const Select = ({
@@ -39,6 +41,7 @@ const Select = ({
   props,
   className,
   selectLabel,
+  Icon,
 }: SelectProps) => {
   const [selectOpen, setSelectOpen] = useState(false);
 
@@ -70,7 +73,11 @@ const Select = ({
         className="flex items-center w-full"
         onClick={() => setSelectOpen((currValue) => !currValue)}
       >
-        <LuUserCog2 className="absolute left-2 pointer-events-none h-5 w-5 text-secondary-foreground" />
+        {Icon ? (
+          <Icon className="absolute left-2 pointer-events-none h-5 w-5 text-secondary-foreground" />
+        ) : (
+          <LuUserCog2 className="absolute left-2 pointer-events-none h-5 w-5 text-secondary-foreground" />
+        )}
 
         <div
           {...props}

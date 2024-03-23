@@ -148,8 +148,20 @@ export const CategorySchema = z.object({
     .string()
     .trim()
     .min(1, { message: "Category name is required" })
-    .max(30, { message: "Category name must be between 1 and 30 characters." })
-    .refine((value) => /^[a-zA-Z]+[-'s]?[a-zA-Z ]+$/.test(value ?? ""), {
-      message: "Numbers and special characters are not allowed",
+    .max(30, { message: "Category name must be between 1 and 30 characters." }),
+});
+
+export const SubCategorySchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, { message: "SubCategory name is required" })
+    .max(30, {
+      message: "SubCategory name must be between 1 and 30 characters.",
     }),
+  category: z
+    .string()
+    .trim()
+    .min(1, { message: "Category name is required" })
+    .max(30, { message: "Category name must be between 1 and 30 characters." }),
 });

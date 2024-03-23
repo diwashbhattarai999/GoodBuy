@@ -131,17 +131,19 @@ model Category {
   name String
   slug String
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  Product     Product[]
-  SubCategory SubCategory[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  Product        Product[]
+  SubCategory    SubCategory[] @relation(fields: [subCategoryIds], references: [id])
+  subCategoryIds String[]      @db.ObjectId
 }
 
 model SubCategory {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String   @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String
+  category    Category[] @relation(fields: [categoryIds], references: [id])
+  categoryIds String[]   @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

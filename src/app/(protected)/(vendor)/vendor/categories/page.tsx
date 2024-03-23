@@ -1,13 +1,14 @@
-import MaxWidthContainer from "@/components/max-width-container";
-import CategoryForm from "../_components/categories/category-form";
+import { getCategories } from "@/data/vendor/category";
+import CategoryForm from "../_components/category-form";
 
-const Categories = () => {
-  const categories = [{ name: "Men's Fashion" }];
+const CategoriesPage = async () => {
+  const allCategories = await getCategories();
+
   return (
     <div className="w-full flex flex-col items-center justify-center">
-      <CategoryForm categories={categories} />
+      <CategoryForm allCategories={allCategories} />
     </div>
   );
 };
 
-export default Categories;
+export default CategoriesPage;
