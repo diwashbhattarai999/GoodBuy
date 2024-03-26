@@ -181,7 +181,7 @@ export const CreateProductSchema = z.object({
   productId: z.optional(z.string()),
   sku: z.string().min(1, { message: "Please add a sku/number" }),
   discount: z.optional(z.number()),
+  image: z.optional(z.array(z.string())),
   // color: z.optional(z.string().min(1, { message: "Please add a color" })),
-  // image: z.optional(z.string()),
   // style: z.optional(z.string()),
 });

@@ -13,6 +13,7 @@ import "@uploadthing/react/styles.css";
 
 import Footer from "@/components/sections/Footer/Footer";
 import Navbar from "@/components/sections/Navbar";
+import { Toaster } from "react-hot-toast";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -39,6 +40,7 @@ export default async function RootLayout({
           )}
         >
           {children}
+          <Toaster />
         </body>
       </html>
     </SessionProvider>

@@ -28,6 +28,7 @@ import Select from "@/components/ui/select";
 import { MdOutlineCategory } from "react-icons/md";
 import Input from "@/components/ui/input";
 import MultiSelect from "@/components/ui/multi-select";
+import AddProductImage from "@/app/(protected)/(vendor)/vendor/_components/add-product-image";
 
 interface CreateProductFormProps {
   parentsData: { id: string; name: string; subProducts: SubProduct[] }[] | null;
@@ -61,7 +62,7 @@ type DefaultValuesType = {
   shippingFee: string;
 };
 
-const defaultValues: DefaultValuesType = {
+const initialProduct: DefaultValuesType = {
   name: "",
   description: "",
   brand: "",
@@ -88,7 +89,7 @@ const CreateProductForm = ({
   parentsData,
   categories,
 }: CreateProductFormProps) => {
-  const [product, setProduct] = useState(defaultValues);
+  const [product, setProduct] = useState(initialProduct);
   const [subCategories, setSubCategories] = useState<
     {
       name: string;
@@ -96,7 +97,7 @@ const CreateProductForm = ({
     }[]
   >([]);
   const [colorImage, setColorImage] = useState("");
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<string[]>([]);
   const [descriptionImages, setDescriptionImages] = useState([]);
   const [selectProduct, setSelectProduct] = useState("Select a product");
   const [selectCategory, setSelectCategory] = useState("Select a category");
@@ -106,26 +107,29 @@ const CreateProductForm = ({
   const [success, setSuccess] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
 
+  const defaultValues = {
+    name: product.name,
+    brand: product.brand,
+    description: product.description,
+    category: product.category.id,
+    productId: product.productId,
+    subCategories: product.subCategories.map((subcategory) => subcategory.id),
+    sku: product.sku,
+    discount: product.discount,
+    image: images,
+    // color: product.color.color,
+    // style: "",
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<z.infer<typeof CreateProductSchema>>({
     resolver: zodResolver(CreateProductSchema),
-    defaultValues: {
-      name: product.name,
-      brand: product.brand,
-      description: product.description,
-      category: product.category.id,
-      productId: product.productId,
-      subCategories: product.subCategories.map((subcategory) => subcategory.id),
-      sku: product.sku,
-      discount: product.discount,
-      // color: product.color.color,
-      // image: "",
-      // style: "",
-    },
+    defaultValues,
   });
 
   useEffect(() => {
@@ -147,13 +151,14 @@ const CreateProductForm = ({
             };
           });
 
-          // reset({
-          //   name: data.name,
-          //   description: data.description,
-          //   brand: data.brand,
-          //   category: data.category,
-          //   subCategories: data.subCategories,
-          // });
+          reset({
+            ...defaultValues,
+            name: data.name,
+            description: data.description,
+            brand: data.brand,
+            category: data.category,
+            subCategories: data.subCategories,
+          });
         })
         .catch((err) => console.log(err));
     };
@@ -218,6 +223,12 @@ const CreateProductForm = ({
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-start z-0 my-5"
         >
+          <AddProductImage
+            images={images}
+            setImages={setImages}
+            value={defaultValues.image}
+            setValue={setValue}
+          />
           {/* User Inputs -- Parent Product Id */}
           <Select
             selectLabel="Add to an existing Product"

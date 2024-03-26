@@ -1,4 +1,5 @@
 import { currentUser } from "@/lib/auth";
+import toast from "react-hot-toast";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
@@ -33,7 +34,8 @@ export const ourFileRouter = {
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
     }),
-  multipleImageUploader: f({ image: { maxFileSize: "8MB", maxFileCount: 6 } })
+
+  multipleImageUploader: f({ image: { maxFileSize: "64MB", maxFileCount: 6 } })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
       // This code runs on your server before upload
@@ -45,6 +47,7 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
     })
+
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userId);

@@ -1,12 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { UseFormSetValue } from "react-hook-form";
 
 import { UploadButton } from "@/lib/uploadthing";
-import { UseFormSetValue } from "react-hook-form";
-import { useState } from "react";
-import Button from "../ui/Button";
+
+import Button from "@/components/ui/Button";
 
 interface ChangeProfileImgProps {
   value?: string;
