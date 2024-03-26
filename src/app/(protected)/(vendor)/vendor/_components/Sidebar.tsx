@@ -35,8 +35,8 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        "bg-primary md:rounded-r-2xl h-fit md:h-screen md:overflow-y-scroll overflow-x-visible no-scrollbar p-5 md:pl-8 md:pr-4 md:py-10 md:transition-all md:duration-500 flex md:flex-col items-center md:items-start justify-between z-20 left-0 w-full sticky top-0 md:left-0",
-        expandSidebar ? "md:w-[270px]" : "md:w-28"
+        "bg-primary/70 border-r border-r-border shadow-sm md:rounded-r-2xl h-fit md:h-screen md:overflow-y-scroll no-scrollbar p-5 md:pl-8 md:pr-4 md:py-10 md:transition-all md:duration-500 flex md:flex-col items-center md:items-start justify-between z-20 left-0 w-full sticky top-0 md:bottom-0",
+        expandSidebar ? "md:w-[280px]" : "md:w-28"
       )}
     >
       {/* Logo */}
@@ -115,9 +115,9 @@ const Sidebar = () => {
             </Link>
 
             <Link
-              href={`/vendor/create-products`}
+              href={`/vendor/create-product`}
               className={`flex items-center gap-6 font-semibold text-lg transition-colors hover:text-accent ${
-                pathname === "/create-products"
+                pathname === "/create-product"
                   ? "text-accent"
                   : "text-secondary-foreground"
               }`}
@@ -127,7 +127,7 @@ const Sidebar = () => {
               {expandSidebar && (
                 <div
                   className={`text-sm rounded-md p-3 hover:bg-accent/95 hover:text-primary transition-colors w-[8.5rem] ${
-                    pathname === "/create-products" && "bg-accent/95"
+                    pathname === "/create-product" && "bg-accent/95"
                   }`}
                 >
                   Create Product

@@ -1,12 +1,8 @@
-"use client";
-
-import { ReactPropTypes, useState } from "react";
+import { useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { LuChevronDown, LuTrash2, LuUserCog2 } from "react-icons/lu";
-
-import { cn } from "@/lib/utils";
-
+import { LuChevronDown, LuUserCog2, LuX } from "react-icons/lu";
 import { IconType } from "react-icons/lib";
+import { cn } from "@/lib/utils";
 
 export type Options = {
   readonly value: string;
@@ -16,19 +12,19 @@ export type Options = {
 interface SelectProps {
   name: string;
   register: UseFormRegisterReturn;
-  value: string;
-  setSelectValue: React.Dispatch<React.SetStateAction<any>>;
+  value: string[];
+  setSelectValue: React.Dispatch<React.SetStateAction<string[]>>;
   error?: string;
   disabled?: boolean;
   options: Options[];
-  props?: ReactPropTypes;
+  props?: React.InputHTMLAttributes<HTMLInputElement>;
   className?: string;
   selectLabel: string;
   Icon?: IconType;
-  onChange?: (value: string) => void;
+  onChange?: (value: string[]) => void;
 }
 
-const Select = ({
+const MultiSelect = ({
   name,
   value,
   setSelectValue,
@@ -43,20 +39,27 @@ const Select = ({
   onChange,
 }: SelectProps) => {
   const [selectOpen, setSelectOpen] = useState(false);
+  const [selectedLabel, setSelectedLabel] = useState([]);
 
   const handleSelect = (option: Options) => {
-    if (!disabled) {
-      setSelectValue(option.label);
-      register.onChange({ target: { name, value: option.value } });
-      setSelectOpen(false);
-
-      onChange && onChange(option.value);
+    const isSelected = value.includes(option.value);
+    if (isSelected) {
+      setSelectValue((prevValue) =>
+        prevValue.filter((val) => val !== option.value)
+      );
+    } else {
+      setSelectValue((prevValue) => [...prevValue, option.value]);
     }
+
+    register.onChange({ target: { name, value: [...value, option.value] } });
+    onChange && onChange([...value]);
   };
 
-  // Add an empty default option
-  const defaultOption: Options = { value: "", label: "Select..." };
-  const optionsWithDefault = [defaultOption, ...options];
+  const handleRemove = (removedValue: string) => {
+    setSelectValue((prevValue) =>
+      prevValue.filter((val) => val !== removedValue)
+    );
+  };
 
   return (
     <div
@@ -92,16 +95,34 @@ const Select = ({
         <div
           {...props}
           className={cn(
-            "w-full h-full py-4 px-10 bg-transparent border rounded-md text-left text-primary-foreground placeholder:text-secondary-foreground outline-none  appearance-none ",
+            "w-full h-full py-4 px-10 bg-transparent border rounded-md text-left text-primary-foreground placeholder:text-secondary-foreground outline-none appearance-none flex items-start justify-start gap-4",
             error
               ? "border-destructive focus:border-destructive"
               : "border-input focus:border-secondary-foreground",
             disabled ? "cursor-not-allowed" : "cursor-pointer",
             className
           )}
-          {...register}
         >
-          {value}
+          {value.length === 0
+            ? "Select..."
+            : value.map((val) => {
+                const selectedOption = options.find(
+                  (option) => option.value === val
+                );
+                return (
+                  <div
+                    className="text-left bg-muted rounded-md w-fit py-1 px-2 flex gap-2 items-center"
+                    key={val}
+                    {...register}
+                  >
+                    {selectedOption && selectedOption.label}
+                    <LuX
+                      className="text-destructive font-bold w-5 h-5"
+                      onClick={() => handleRemove(val)}
+                    />
+                  </div>
+                );
+              })}
         </div>
         <LuChevronDown className="absolute right-2 cursor-pointer pr-4 h-9 w-9 text-secondary-foreground " />
       </div>
@@ -115,11 +136,11 @@ const Select = ({
             : "-translate-y-5 opacity-0 h-0 pointer-events-none"
         )}
       >
-        {optionsWithDefault.map((option) => (
+        {options.map((option) => (
           <div
             key={option.value}
             className={cn(
-              "py-3 hover:bg-muted  rounded-md px-10 duration-300 m-2 capitalize flex justify-between group",
+              "py-3 hover:bg-muted rounded-md px-10 duration-300 m-2 capitalize flex justify-between group",
               disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
               value.includes(option.label) && "bg-muted"
             )}
@@ -137,4 +158,4 @@ const Select = ({
   );
 };
 
-export default Select;
+export default MultiSelect;

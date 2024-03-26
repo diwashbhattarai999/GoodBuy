@@ -98,4 +98,14 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  .custom-slider::-webkit-scrollbar {
+    width: 0.2rem;
+    background-color: white;
+  }
+
+  .custom-slider::-webkit-scrollbar-thumb {
+    height: 2px;
+    background-color: #eeeeee;
+  }
 }

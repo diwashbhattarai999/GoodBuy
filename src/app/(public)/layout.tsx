@@ -1,4 +1,4 @@
-import Footer from "@/components/sections/Footer";
+import Footer from "@/components/sections/Footer/Footer";
 import Navbar from "@/components/sections/Navbar";
 
 export default async function HomeLayout({

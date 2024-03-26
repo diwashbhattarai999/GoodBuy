@@ -108,15 +108,11 @@ const SubCategoryForm = ({
     setEditingSubCategory({
       id: subcategory.id,
       name: subcategory.name,
-      category: Array.isArray(subcategory.categoryIds)
-        ? subcategory.categoryIds[0] // Use the first category ID if it's an array
-        : subcategory.categoryIds, // Otherwise, use the single category ID
+      category: subcategory.categoryId,
     });
     reset({
       name: subcategory.name,
-      category: Array.isArray(subcategory.categoryIds)
-        ? subcategory.categoryIds[0] // Use the first category ID if it's an array
-        : subcategory.categoryIds, // Otherwise, use the single category ID
+      category: subcategory.categoryId,
     });
   };
 

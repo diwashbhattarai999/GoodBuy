@@ -12,7 +12,7 @@ interface InputProps {
   name: string;
   type: HTMLInputTypeAttribute;
   register: UseFormRegisterReturn;
-  value?: string;
+  value?: string | number;
   placeholder?: string;
   icon?: IconType;
   error?: string;

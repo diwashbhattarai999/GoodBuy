@@ -165,3 +165,23 @@ export const SubCategorySchema = z.object({
     .min(1, { message: "Category name is required" })
     .max(30, { message: "Category name must be between 1 and 30 characters." }),
 });
+
+export const CreateProductSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, { message: "SubCategory name is required" })
+    .max(300, {
+      message: "SubCategory name must be between 1 and 300 characters.",
+    }),
+  brand: z.string().min(1, { message: "Please add a brand" }),
+  description: z.string().min(1, { message: "Please add a description" }),
+  category: z.optional(z.string()),
+  subCategories: z.optional(z.array(z.string())),
+  productId: z.optional(z.string()),
+  sku: z.string().min(1, { message: "Please add a sku/number" }),
+  discount: z.optional(z.number()),
+  // color: z.optional(z.string().min(1, { message: "Please add a color" })),
+  // image: z.optional(z.string()),
+  // style: z.optional(z.string()),
+});

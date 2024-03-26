@@ -31,25 +31,25 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
       value={{ expandSidebar, setExpandSidebar, profileOpen, setProfileOpen }}
     >
       <Sidebar />
-      <div className="relative">
-        {expandSidebar ? (
-          <LuChevronLeft
-            className="w-7 h-7 rounded-r-md cursor-pointer absolute top-[6.5%] -left-5"
-            onClick={() => {
-              setExpandSidebar(!expandSidebar);
-              setProfileOpen(false);
-            }}
-          />
-        ) : (
-          <LuChevronRight
-            className="w-7 h-7 rounded-r-md cursor-pointer absolute top-[6.5%] -left-5"
-            onClick={() => {
-              setExpandSidebar(!expandSidebar);
-              setProfileOpen(false);
-            }}
-          />
-        )}
-      </div>
+
+      {expandSidebar ? (
+        <LuChevronLeft
+          className="w-8 h-8 rounded-r-md cursor-pointer sticky top-[3rem] -ml-[1rem]"
+          onClick={() => {
+            setExpandSidebar(!expandSidebar);
+            setProfileOpen(false);
+          }}
+        />
+      ) : (
+        <LuChevronRight
+          className="w-8 h-8 rounded-r-md cursor-pointer sticky top-[3rem] -ml-[1rem]"
+          onClick={() => {
+            setExpandSidebar(!expandSidebar);
+            setProfileOpen(false);
+          }}
+        />
+      )}
+
       {children}
     </ExpandContext.Provider>
   );

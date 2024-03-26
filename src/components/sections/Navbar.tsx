@@ -51,9 +51,16 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
         <div className="py-4 w-full flex items-center justify-between">
           <Link
             href="/"
-            className="text-3xl font-bold tracking-tight text-primary-foregroun"
+            className="text-3xl font-bold tracking-tight text-primary-foreground max-md:hidden"
           >
             Good <span className="text-accent">Buy</span>
+          </Link>
+
+          <Link
+            href="/"
+            className="text-3xl font-bold tracking-tight text-primary-foreground md:hidden"
+          >
+            G<span className="text-accent">B</span>
           </Link>
 
           <div className="hidden md:flex gap-16 text-sm font-medium lg:gap-24">

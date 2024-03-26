@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import "./globals.css";
 import "@uploadthing/react/styles.css";
 
-import Footer from "@/components/sections/Footer";
+import Footer from "@/components/sections/Footer/Footer";
 import Navbar from "@/components/sections/Navbar";
 
 const montserrat = Montserrat({

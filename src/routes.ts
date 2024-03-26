@@ -33,6 +33,13 @@ export const authRoutes = [
 export const apiAuthPrefix = "/api/auth";
 
 /**
+ * The prefix for product routes
+ * Routes that start with this prefix are used for product pages
+ * @type {string}
+ */
+export const productPrefix = "/product";
+
+/**
  * The default redirect path after loggin in
  * @type {string}
  */

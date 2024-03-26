@@ -2,7 +2,7 @@ import { UserRole } from "@prisma/client";
 
 import { RoleGate } from "@/components/auth/role-gate";
 import Navbar from "@/components/sections/Navbar";
-import Footer from "@/components/sections/Footer";
+import Footer from "@/components/sections/Footer/Footer";
 
 export default function ProtectedLayout({
   children,

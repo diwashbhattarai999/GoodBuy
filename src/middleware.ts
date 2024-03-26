@@ -5,6 +5,7 @@ import {
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
+  productPrefix,
   publicRoutes,
 } from "@/routes";
 import { currentUser } from "./lib/auth";
@@ -23,8 +24,11 @@ export default auth(async (req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isAdmin = nextUrl.pathname == "/admin";
   const isVendor = nextUrl.pathname == "/vendor";
+  const isProductRoute = nextUrl.pathname.startsWith(productPrefix);
 
   if (isApiAuthRoute) return;
+
+  if (isProductRoute) return;
 
   if (isAuthRoute) {
     if (isLoggedIn) {
