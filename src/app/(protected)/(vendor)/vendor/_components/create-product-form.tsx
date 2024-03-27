@@ -166,6 +166,7 @@ const CreateProductForm = ({
     if (product.productId.length > 0) {
       getParentData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.productId]);
 
   useEffect(() => {

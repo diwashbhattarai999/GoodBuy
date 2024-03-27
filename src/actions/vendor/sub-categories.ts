@@ -22,8 +22,6 @@ export const subcategories = async (
 
   const { name, category } = validatedFields.data;
 
-  console.log(id, category);
-
   const existingSubcategory = await getSubcategoryByName(name);
 
   if (existingSubcategory) {
@@ -33,19 +31,12 @@ export const subcategories = async (
       };
     }
 
-    const newCategoryIds = [
-      ...existingSubcategory.categoryIds.filter(
-        (categoryId) => categoryId !== category
-      ),
-      category,
-    ];
-
     await db.subCategory.update({
       where: { id },
       data: {
         name,
         slug: slugify(name),
-        categoryIds: newCategoryIds,
+        categoryId: category,
       },
     });
     return { success: "Category Edited!" };
@@ -55,7 +46,7 @@ export const subcategories = async (
     data: {
       name: name,
       slug: slugify(name),
-      categoryIds: [category],
+      categoryId: category,
     },
   });
 

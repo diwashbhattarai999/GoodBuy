@@ -1,10 +1,10 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export const GET = async (
+export async function GET(
   req: Request,
   { params }: { params: { categoryId: string } }
-) => {
+) {
   try {
     const categoryId = params.categoryId;
     const subCategories = await db.subCategory.findMany({
@@ -14,6 +14,6 @@ export const GET = async (
 
     return NextResponse.json(subCategories, { status: 200 });
   } catch (error) {
-    return null;
+    return NextResponse.json({ error: "Something went wrong" });
   }
-};
+}
