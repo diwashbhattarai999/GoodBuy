@@ -1,7 +1,7 @@
 import { UserRole } from "@prisma/client";
 
 import { RoleGate } from "@/components/auth/role-gate";
-import LayoutWrapper from "./vendor/layout-wrapper";
+import LayoutWrapper from "./layout-wrapper";
 
 export default function VendorLayout({
   children,
