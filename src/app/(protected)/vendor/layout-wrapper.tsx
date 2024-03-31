@@ -34,7 +34,7 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
 
       {expandSidebar ? (
         <LuChevronLeft
-          className="w-8 h-8 rounded-r-md cursor-pointer sticky top-[3rem] -ml-[1rem]"
+          className="w-8 h-8 rounded-r-md cursor-pointer sticky top-[3rem] -ml-[1rem] max-md:hidden"
           onClick={() => {
             setExpandSidebar(!expandSidebar);
             setProfileOpen(false);
@@ -42,7 +42,7 @@ const LayoutWrapper = ({ children }: { children: ReactNode }) => {
         />
       ) : (
         <LuChevronRight
-          className="w-8 h-8 rounded-r-md cursor-pointer sticky top-[3rem] -ml-[1rem]"
+          className="w-8 h-8 rounded-r-md cursor-pointer sticky top-[3rem] -ml-[1rem] max-md:hidden"
           onClick={() => {
             setExpandSidebar(!expandSidebar);
             setProfileOpen(false);

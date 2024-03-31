@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -21,10 +21,29 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import MotionSidebar from "@/components/animations/motion-sidebar";
 
 const Sidebar = () => {
+  const [windowWidth, setWindowWidth] = useState(0);
   const pathname = usePathname().split("/")[2];
 
   const { expandSidebar, setExpandSidebar, profileOpen, setProfileOpen } =
     useContext(ExpandContext);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    // cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (windowWidth < 768) {
+      setExpandSidebar(false);
+    }
+  }, [windowWidth, setExpandSidebar]);
 
   const handleLogout = () => {
     logout();
@@ -35,12 +54,12 @@ const Sidebar = () => {
   return (
     <div
       className={cn(
-        "bg-primary/70 border-r border-r-border shadow-sm md:rounded-r-2xl h-fit md:h-screen md:overflow-y-scroll no-scrollbar p-5 md:pl-8 md:pr-4 md:py-10 md:transition-all md:duration-500 flex md:flex-col items-center md:items-start justify-between z-20 left-0 w-full sticky top-0 md:bottom-0",
-        expandSidebar ? "md:w-[280px]" : "md:w-28"
+        "bg-primary/70 backdrop-blur-md border-b border-b-border md:border-r md:border-r-border shadow-md md:rounded-r-2xl h-fit md:h-screen md:overflow-y-scroll no-scrollbar p-5 md:pl-8 md:pr-4 md:py-10 md:transition-all md:duration-500 flex md:flex-col items-center md:items-start justify-between z-20 left-0 w-full sticky top-0 md:bottom-0",
+        expandSidebar ? "md:min-w-[280px] md:w-[280px]" : "md:min-w-28 md:w-28"
       )}
     >
       {/* Logo */}
-      <div className="w-full mb-5">
+      <div className="w-full md:mb-5">
         <Link href="/vendor" className="font-bold text-3xl text-foreground">
           {expandSidebar ? (
             <>
@@ -75,7 +94,8 @@ const Sidebar = () => {
                   <div
                     className={cn(
                       "text-sm rounded-md p-3 hover:bg-accent/95 hover:text-primary transition-colors w-[8.5rem]",
-                      pathname === link.href && "bg-accent/95 text-primary"
+                      pathname === link.href &&
+                        "bg-accent/95 text-accent-foreground"
                     )}
                   >
                     {link.label}
@@ -87,16 +107,17 @@ const Sidebar = () => {
         </div>
 
         <div className="flex flex-col gap-6 justify-between flex-1 items-center">
-          <div className="border-b border-foreground/50 pb-4">
+          <div className="border-b border-foreground/50 pb-4 flex flex-col gap-1">
             {expandSidebar && (
               <div className="text-lg font-semibold w-full cursor-default">
                 Products
               </div>
             )}
+            {/* Products */}
             <Link
               href={`/vendor/products`}
               className={`flex items-center gap-6 font-semibold text-lg transition-colors hover:text-accent ${
-                pathname === "/products"
+                pathname === "products"
                   ? "text-accent"
                   : "text-secondary-foreground"
               }`}
@@ -106,7 +127,8 @@ const Sidebar = () => {
               {expandSidebar && (
                 <div
                   className={`text-sm rounded-md p-3 hover:bg-accent/95 hover:text-primary transition-colors w-[8.5rem] ${
-                    pathname === "/products" && "bg-accent/95"
+                    pathname === "products" &&
+                    "bg-accent/95 text-accent-foreground"
                   }`}
                 >
                   Products
@@ -114,10 +136,11 @@ const Sidebar = () => {
               )}
             </Link>
 
+            {/* Create-Products */}
             <Link
               href={`/vendor/create-product`}
               className={`flex items-center gap-6 font-semibold text-lg transition-colors hover:text-accent ${
-                pathname === "/create-product"
+                pathname === "create-product"
                   ? "text-accent"
                   : "text-secondary-foreground"
               }`}
@@ -127,7 +150,8 @@ const Sidebar = () => {
               {expandSidebar && (
                 <div
                   className={`text-sm rounded-md p-3 hover:bg-accent/95 hover:text-primary transition-colors w-[8.5rem] ${
-                    pathname === "/create-product" && "bg-accent/95"
+                    pathname === "create-product" &&
+                    "bg-accent/95 text-accent-foreground"
                   }`}
                 >
                   Create Product
@@ -136,7 +160,7 @@ const Sidebar = () => {
             </Link>
           </div>
 
-          <div className="border-b border-foreground/50 pb-4">
+          <div className="border-b border-foreground/50 pb-4 flex flex-col gap-1">
             {expandSidebar && (
               <div className="text-lg font-semibold w-full cursor-default">
                 Categories / Subs
@@ -145,7 +169,7 @@ const Sidebar = () => {
             <Link
               href={`/vendor/categories`}
               className={`flex items-center gap-6 font-semibold text-lg transition-colors hover:text-accent ${
-                pathname === "/categories"
+                pathname === "categories"
                   ? "text-accent"
                   : "text-secondary-foreground"
               }`}
@@ -155,7 +179,8 @@ const Sidebar = () => {
               {expandSidebar && (
                 <div
                   className={`text-sm rounded-md p-3 hover:bg-accent/95 hover:text-primary transition-colors w-[8.5rem] ${
-                    pathname === "/categories" && "bg-muted"
+                    pathname === "categories" &&
+                    "bg-accent/95 text-accent-foreground"
                   }`}
                 >
                   Categories
@@ -166,7 +191,7 @@ const Sidebar = () => {
             <Link
               href={`/vendor/sub-categories`}
               className={`flex items-center gap-6 font-semibold text-lg transition-colors hover:text-accent ${
-                pathname === "/sub-categories"
+                pathname === "sub-categories"
                   ? "text-accent"
                   : "text-secondary-foreground"
               }`}
@@ -176,7 +201,8 @@ const Sidebar = () => {
               {expandSidebar && (
                 <div
                   className={`text-sm rounded-md p-3 hover:bg-accent/95 hover:text-primary transition-colors w-[8.5rem] ${
-                    pathname === "/sub-categories" && "bg-accent/95"
+                    pathname === "sub-categories" &&
+                    "bg-accent/95 text-accent-foreground"
                   }`}
                 >
                   SubCategories
@@ -185,7 +211,7 @@ const Sidebar = () => {
             </Link>
           </div>
 
-          <div className="pb-4">
+          <div className="pb-4 flex flex-col gap-1">
             {expandSidebar && (
               <div className="text-lg font-semibold w-full cursor-default">
                 Coupens
@@ -194,7 +220,7 @@ const Sidebar = () => {
             <Link
               href={`/vendor/coupens`}
               className={`flex items-center gap-6 font-semibold text-lg transition-colors hover:text-accent ${
-                pathname === "/coupens"
+                pathname === "coupens"
                   ? "text-accent"
                   : "text-secondary-foreground"
               }`}
@@ -204,7 +230,8 @@ const Sidebar = () => {
               {expandSidebar && (
                 <div
                   className={`text-sm rounded-md p-3 hover:bg-accent/95 hover:text-primary transition-colors w-[8.5rem] ${
-                    pathname === "/coupens" && "bg-accent/95"
+                    pathname === "coupens" &&
+                    "bg-accent/95 text-accent-foreground"
                   }`}
                 >
                   Coupens
@@ -232,9 +259,9 @@ const Sidebar = () => {
             </h3>
           )}
           {profileOpen && (
-            <MotionSidebar className="absolute z-50 max-md:top-12 max-md:right-0 md:bottom-14 md:left-0 bg-popover border shadow-md rounded-md py-3 px-2 w-[8rem] text-primary-foreground">
-              <div className="flex flex-col gap-2">
-                <div className="max-md:flex hidden flex-col gap-2">
+            <MotionSidebar className="absolute z-50 max-md:top-10 max-md:right-0 md:bottom-14 md:left-0 bg-popover border shadow-md rounded-md py-1 md:py-2 px-2 w-[14rem] md:w-[10rem] text-primary-foreground">
+              <div className="flex flex-col">
+                <div className="max-md:flex hidden flex-col">
                   {SIDEBAR_LINKS.map((link) => {
                     return (
                       <Link
@@ -247,10 +274,90 @@ const Sidebar = () => {
                         )}
                       >
                         <link.icon className="py-3 w-auto h-11" />
-                        {expandSidebar && <p>{link.label}</p>}
+                        <p>{link.label}</p>
                       </Link>
                     );
                   })}
+                </div>
+
+                <hr className="md:hidden my-2 bg-muted" />
+
+                <div className="md:hidden flex flex-col justify-between">
+                  <div className=" font-semibold w-full cursor-default px-2">
+                    Products
+                  </div>
+
+                  <Link
+                    href={`/vendor/products`}
+                    onClick={() => setProfileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-2 rounded-md font-medium transition-colors hover:text-foreground hover:bg-muted",
+                      pathname === "/products" && "text-foreground"
+                    )}
+                  >
+                    <FaBoxOpen className="py-3 w-auto h-11" />
+                    <p>Products</p>
+                  </Link>
+
+                  <Link
+                    href={`/vendor/create-product`}
+                    onClick={() => setProfileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-2 rounded-md font-medium transition-colors hover:text-foreground hover:bg-muted",
+                      pathname === "/create-product" && "text-foreground"
+                    )}
+                  >
+                    <LuPlusCircle className="py-3 w-auto h-11" />
+                    <p>Create Product</p>
+                  </Link>
+
+                  <hr className="md:hidden my-2 bg-muted" />
+
+                  <div className=" font-semibold w-full cursor-default px-2">
+                    Categories / Subs
+                  </div>
+
+                  <Link
+                    href={`/vendor/categories`}
+                    onClick={() => setProfileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-2 rounded-md font-medium transition-colors hover:text-foreground hover:bg-muted",
+                      pathname === "/categories" && "text-foreground"
+                    )}
+                  >
+                    <FaBoxOpen className="py-3 w-auto h-11" />
+                    <p>Categories</p>
+                  </Link>
+
+                  <Link
+                    href={`/vendor/sub-categories`}
+                    onClick={() => setProfileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-2 rounded-md font-medium transition-colors hover:text-foreground hover:bg-muted",
+                      pathname === "/sub-categories" && "text-foreground"
+                    )}
+                  >
+                    <LuPlusCircle className="py-3 w-auto h-11" />
+                    <p>SubCategories</p>
+                  </Link>
+
+                  <hr className="md:hidden my-2 bg-muted" />
+
+                  <div className=" font-semibold w-full cursor-default px-2">
+                    Coupens
+                  </div>
+
+                  <Link
+                    href={`/vendor/coupens`}
+                    onClick={() => setProfileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-2 rounded-md font-medium transition-colors hover:text-foreground hover:bg-muted",
+                      pathname === "/coupens" && "text-foreground"
+                    )}
+                  >
+                    <HiMiniTicket className="py-3 w-auto h-11" />
+                    <p>Coupens</p>
+                  </Link>
                 </div>
 
                 <hr className="md:hidden my-2 bg-muted" />
@@ -263,7 +370,7 @@ const Sidebar = () => {
                   <h3>Logout</h3>
                 </div>
 
-                <h3 className="px-2 py-3 rounded-md font-medium text-secondary-foreground">
+                <h3 className="px-2 py-2 rounded-md font-medium text-secondary-foreground">
                   @{user?.email?.split("@")[0]}
                 </h3>
               </div>

@@ -10,6 +10,9 @@ interface BreadCrumbsProps {
 }
 
 const BreadCrumbs: React.FC<BreadCrumbsProps> = ({ product }) => {
+
+  
+
   return (
     <div className="mb-2">
       <ul className="flex items-center gap-1 text-sm italic flex-wrap">

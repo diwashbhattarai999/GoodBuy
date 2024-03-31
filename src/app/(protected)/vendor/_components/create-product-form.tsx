@@ -7,15 +7,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaBoxOpen } from "react-icons/fa";
 import { MdDriveFileRenameOutline } from "react-icons/md";
+import { CiPickerHalf } from "react-icons/ci";
+import { MdOutlineCategory } from "react-icons/md";
 
-import {
-  Category,
-  Image,
-  Size,
-  Style,
-  SubCategory,
-  SubProduct,
-} from "@prisma/client";
+import { Category, SubCategory, SubProduct } from "@prisma/client";
 
 import { CreateProductSchema } from "@/schemas";
 
@@ -25,28 +20,34 @@ import FormSuccess from "@/components/ui/form-success";
 import FormError from "@/components/ui/form-error";
 import Button from "@/components/ui/Button";
 import Select from "@/components/ui/select";
-import { MdOutlineCategory } from "react-icons/md";
 import Input from "@/components/ui/input";
 import MultiSelect from "@/components/ui/multi-select";
-import AddProductImage from "@/app/(protected)/(vendor)/vendor/_components/add-product-image";
+import AddProductImage from "@/app/(protected)/vendor/_components/add-product-image";
+import Sizes from "@/app/(protected)/vendor/_components/sizes";
+import Details from "@/app/(protected)/vendor/_components/details";
+import Questions from "@/app/(protected)/vendor/_components/questions";
 
 interface CreateProductFormProps {
   parentsData: { id: string; name: string; subProducts: SubProduct[] }[] | null;
   categories: Category[] | null;
 }
 
-type DefaultValuesType = {
+export type DefaultValuesType = {
   name: string;
   description: string;
   brand: string;
   sku: string;
   discount: number;
-  images: Image[];
+  images: string[];
   productId: string;
-  category: Category;
+  category: { id: string; name: string };
   subCategories: SubCategory[];
-  color: Style;
-  sizes: Size[];
+  color: { color: string; image: string };
+  sizes: {
+    size: string;
+    qty: number;
+    price: number;
+  }[];
   details:
     | {
         name: string;
@@ -55,8 +56,8 @@ type DefaultValuesType = {
     | [];
   questions:
     | {
-        name: string;
-        value: string;
+        question: string;
+        answer: string;
       }[]
     | [];
   shippingFee: string;
@@ -73,15 +74,12 @@ const initialProduct: DefaultValuesType = {
   category: {
     id: "",
     name: "",
-    slug: "",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   subCategories: [],
-  color: { id: "", color: "", image: "" },
-  sizes: [{ id: "", size: "", qty: 0, price: 0, subProductId: null }],
+  color: { color: "", image: "" },
+  sizes: [{ size: "", qty: 0, price: 0 }],
   details: [{ name: "", value: "" }],
-  questions: [{ name: "", value: "" }],
+  questions: [{ question: "", answer: "" }],
   shippingFee: "",
 };
 
@@ -117,8 +115,9 @@ const CreateProductForm = ({
     sku: product.sku,
     discount: product.discount,
     image: images,
-    // color: product.color.color,
-    // style: "",
+    color: product.color.color,
+    style: product.color.image,
+    sizes: product.sizes,
   };
 
   const {
@@ -185,7 +184,18 @@ const CreateProductForm = ({
 
   const onSubmit = (values: z.infer<typeof CreateProductSchema>) => {
     startTransition(() => {
-      console.log(values);
+      // setProduct((prevProduct) => {
+      //   return {
+      //     ...prevProduct,
+      //     name: values.name,
+      //     description: values.description,
+      //     brand: values.brand,
+      //     sku: values.sku,
+      //     discount: values.discount || 0,
+      //     color: { color: values?.color || "", image: colorImage },
+      //   };
+      // });
+      console.log(product);
     });
   };
 
@@ -224,12 +234,37 @@ const CreateProductForm = ({
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col items-start z-0 my-5"
         >
+          {/* User Inputs -- Product Images */}
           <AddProductImage
             images={images}
             setImages={setImages}
-            value={defaultValues.image}
             setValue={setValue}
+            setProduct={setProduct}
+            setColorImage={setColorImage}
           />
+
+          {/* User Inputs -- Colors */}
+          <Input
+            label="Pick a color. You can pick a color image by hovering over the product image above and click color picker at center."
+            name="color"
+            type="text"
+            value={product.color.color}
+            placeholder="Pick a color ( Hex value)"
+            icon={CiPickerHalf}
+            error={errors.color?.message}
+            disabled={isPending}
+            register={register("color")}
+            onChange={(value) => {
+              setProduct({
+                ...product,
+                color: {
+                  color: typeof value === "string" ? value : "",
+                  image: colorImage,
+                },
+              });
+            }}
+          />
+
           {/* User Inputs -- Parent Product Id */}
           <Select
             selectLabel="Add to an existing Product"
@@ -254,13 +289,17 @@ const CreateProductForm = ({
             setSelectValue={setSelectCategory}
             Icon={MdOutlineCategory}
             error={errors.category?.message}
-            disabled={isPending || !!(product.productId.length <= 0)}
+            disabled={isPending}
             options={categoryOptions}
             register={register("category")}
             onChange={(value) => {
               setProduct({
                 ...product,
-                category: { ...product.category, id: value },
+                category: {
+                  ...product.category,
+                  id: value,
+                  name: selectCategory,
+                },
               });
             }}
           />
@@ -275,7 +314,7 @@ const CreateProductForm = ({
               setSelectValue={setSelectSubCategories}
               Icon={MdOutlineCategory}
               error={errors.subCategories?.message}
-              disabled={isPending || !!(product.productId.length <= 0)}
+              disabled={isPending || !!(subcategoryOptions.length <= 0)}
               options={subcategoryOptions}
               register={register("subCategories")}
               onChange={(selectedValues) => {
@@ -285,15 +324,9 @@ const CreateProductForm = ({
                       (subCategory) => subCategory.id === value
                     )
                   )
-                  .filter((subcategory) => subcategory !== undefined) as {
-                  id: string;
-                  name: string;
-                  slug: string;
-                  categoryId: string;
-                  createdAt: Date;
-                  updatedAt: Date;
-                  productId: string | null;
-                }[];
+                  .filter(
+                    (subcategory) => subcategory !== undefined
+                  ) as SubCategory[];
                 setProduct({
                   ...product,
                   subCategories: selectedSubCategories,
@@ -302,9 +335,11 @@ const CreateProductForm = ({
             />
           )}
 
+          {/* --------- Basic Infos --------- */}
           <h2 className="text-lg text-muted-foreground mt-2 pb-1 border-b border-border w-full">
             Basic Infos
           </h2>
+
           {/* User Inputs -- Name */}
           <Input
             label="Name"
@@ -316,6 +351,12 @@ const CreateProductForm = ({
             error={errors.name?.message}
             disabled={isPending}
             register={register("name")}
+            onChange={(value) => {
+              setProduct({
+                ...product,
+                name: value as string,
+              });
+            }}
           />
 
           {/* User Inputs -- Description */}
@@ -329,6 +370,12 @@ const CreateProductForm = ({
             error={errors.description?.message}
             disabled={isPending}
             register={register("description")}
+            onChange={(value) => {
+              setProduct({
+                ...product,
+                description: value as string,
+              });
+            }}
           />
 
           {/* User Inputs -- Brand */}
@@ -342,6 +389,12 @@ const CreateProductForm = ({
             error={errors.brand?.message}
             disabled={isPending}
             register={register("brand")}
+            onChange={(value) => {
+              setProduct({
+                ...product,
+                brand: value as string,
+              });
+            }}
           />
 
           {/* User Inputs -- SKU */}
@@ -355,6 +408,12 @@ const CreateProductForm = ({
             error={errors.sku?.message}
             disabled={isPending}
             register={register("sku")}
+            onChange={(value) => {
+              setProduct({
+                ...product,
+                sku: value as string,
+              });
+            }}
           />
 
           {/* User Inputs -- Discount */}
@@ -368,6 +427,30 @@ const CreateProductForm = ({
             error={errors.discount?.message}
             disabled={isPending}
             register={register("discount", { valueAsNumber: true })}
+            onChange={(value) => {
+              setProduct({
+                ...product,
+                discount: value as number,
+              });
+            }}
+          />
+
+          <Sizes
+            sizes={product.sizes}
+            product={product}
+            setProduct={setProduct}
+          />
+
+          <Details
+            details={product.details}
+            product={product}
+            setProduct={setProduct}
+          />
+
+          <Questions
+            questions={product.questions}
+            product={product}
+            setProduct={setProduct}
           />
 
           {/* Sucess Message */}

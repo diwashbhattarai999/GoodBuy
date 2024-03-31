@@ -52,13 +52,14 @@ const MultiSelect = ({
     }
 
     register.onChange({ target: { name, value: [...value, option.value] } });
-    onChange && onChange([...value]);
+    onChange && onChange([...value, option.value]);
   };
 
   const handleRemove = (removedValue: string) => {
     setSelectValue((prevValue) =>
       prevValue.filter((val) => val !== removedValue)
     );
+    onChange && onChange(value.filter((val) => val !== removedValue));
   };
 
   return (

@@ -17,6 +17,7 @@ interface InputProps {
   icon?: IconType;
   error?: string;
   disabled?: boolean;
+  onChange?: (value: string | number | undefined) => void;
 }
 
 const Input = ({
@@ -29,6 +30,7 @@ const Input = ({
   error,
   disabled,
   register,
+  onChange,
 }: InputProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -72,6 +74,9 @@ const Input = ({
                 ? "border-destructive focus:border-destructive"
                 : "border-input focus:border-secondary-foreground"
             )}
+            onChange={(e) => {
+              onChange && onChange(e.target.value);
+            }}
           />
         </div>
 

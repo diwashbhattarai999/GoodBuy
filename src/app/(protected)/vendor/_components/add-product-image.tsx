@@ -1,72 +1,58 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { UseFormSetValue } from "react-hook-form";
 import toast from "react-hot-toast";
+import axios from "axios";
+import * as z from "zod";
 import { LuZoomIn } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
+import { GiExtractionOrb } from "react-icons/gi";
+import { IoMdClose } from "react-icons/io";
 
 import { UploadButton } from "@/lib/uploadthing";
-import { IoMdClose } from "react-icons/io";
 import { cn } from "@/lib/utils";
-import axios from "axios";
+
+import { CreateProductSchema } from "@/schemas";
+
+import { DefaultValuesType } from "./create-product-form";
 
 interface AddProductImageProps {
   images: string[];
   setImages: React.Dispatch<React.SetStateAction<string[]>>;
-  value: string[];
-  setValue: UseFormSetValue<{
-    name: string;
-    description: string;
-    brand: string;
-    sku: string;
-    category?: string;
-    subCategories?: string[];
-    productId?: string;
-    discount?: number;
-    image?: string[];
-  }>;
+  setValue: UseFormSetValue<z.infer<typeof CreateProductSchema>>;
+  setProduct: React.Dispatch<React.SetStateAction<DefaultValuesType>>;
+  setColorImage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AddProductImage = ({
   images,
   setImages,
-  value,
   setValue,
+  setProduct,
+  setColorImage,
 }: AddProductImageProps) => {
   const [imageHoveredIndex, setImageHoveredIndex] = useState<number | null>(
     null
   );
   const [zoomedImageUrl, setZoomedImageUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    const storedImages = localStorage.getItem("images");
-    if (storedImages) {
-      setImages(JSON.parse(storedImages));
-    }
-  }, [setImages]);
-
-  const handleDeleteImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index);
-
-    setImages(newImages);
-    localStorage.setItem("images", JSON.stringify(newImages));
-  };
-
-  const deleteFromUploadthingServer = async (image: string) => {
-    await axios
-      .delete(`${process.env.NEXT_PUBLIC_APP_URL}/api/uploadthing`, {
+  const handleDeleteImage = async (index: number, imageUrl: string) => {
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_APP_URL}/api/uploadthing`, {
         data: {
-          url: image,
+          url: imageUrl,
         },
-      })
-      .then(() => {
-        toast.success("File Deleted");
-      })
-      .catch(() => {
-        toast.error("Failed to delete file");
       });
+      toast.success("File Deleted");
+      const newImages = images.filter((_, i) => i !== index);
+      setImages(newImages);
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        images: newImages,
+      }));
+    } catch (error) {
+      toast.error("Failed to delete file");
+    }
   };
 
   return (
@@ -83,46 +69,47 @@ const AddProductImage = ({
           />
         ) : (
           <ul className="flex flex-wrap gap-4 items-center justify-start">
-            {images.map((image, index) => {
-              return (
-                <li
-                  key={image}
-                  className="relative h-52 w-40 mb-5"
-                  onMouseEnter={() => setImageHoveredIndex(index)}
-                  onMouseLeave={() => setImageHoveredIndex(null)}
+            {images.map((image, index) => (
+              <li
+                key={image}
+                className="relative h-52 w-40 mb-5"
+                onMouseEnter={() => setImageHoveredIndex(index)}
+                onMouseLeave={() => setImageHoveredIndex(null)}
+              >
+                <Image
+                  src={image}
+                  width={300}
+                  height={300}
+                  alt="Product Image"
+                  className="h-full w-full rounded-md cursor-pointer z-20 object-cover"
+                  loading="eager"
+                  priority
+                />
+
+                <div
+                  className={`absolute top-0 left-0 rounded-md bg-black/70 h-full w-full flex items-center justify-center gap-2 text-[1.6rem] text-white z-30 transition duration-300 ${
+                    imageHoveredIndex === index
+                      ? "opacity-100 pointer-events-auto"
+                      : "opacity-0 pointer-events-none"
+                  }`}
                 >
-                  <Image
-                    src={image}
-                    width={300}
-                    height={300}
-                    alt="Product Image"
-                    className="h-full w-full rounded-md cursor-pointer z-20 object-cover"
-                    loading="eager"
-                    priority
+                  <MdDelete
+                    className="cursor-pointer hover:text-accent"
+                    onClick={() => handleDeleteImage(index, image)}
                   />
 
-                  <div
-                    className={`absolute top-0 left-0 rounded-md bg-black/70 h-full w-full flex items-center justify-center gap-2 text-[1.6rem] text-white z-30 transition duration-300 ${
-                      imageHoveredIndex === index
-                        ? "opacity-100 pointer-events-auto"
-                        : "opacity-0 pointer-events-none"
-                    }`}
-                  >
-                    <MdDelete
-                      className="cursor-pointer hover:text-accent"
-                      onClick={() => {
-                        handleDeleteImage(index);
-                        deleteFromUploadthingServer(image);
-                      }}
-                    />
-                    <LuZoomIn
-                      className="cursor-pointer hover:text-muted-foreground"
-                      onClick={() => setZoomedImageUrl(image)}
-                    />
-                  </div>
-                </li>
-              );
-            })}
+                  <GiExtractionOrb
+                    className="cursor-pointer hover:text-muted-foreground"
+                    onClick={() => setColorImage(image)}
+                  />
+
+                  <LuZoomIn
+                    className="cursor-pointer hover:text-muted-foreground"
+                    onClick={() => setZoomedImageUrl(image)}
+                  />
+                </div>
+              </li>
+            ))}
           </ul>
         )}
       </div>
@@ -132,22 +119,24 @@ const AddProductImage = ({
           toast.loading("Uploading...");
         }}
         onClientUploadComplete={(res) => {
-          setValue && setValue("image", [...images, res[0].url]);
+          setValue &&
+            setValue(
+              "image",
+              res.map((image) => image.url)
+            );
           setImages((prevImages) => [
             ...prevImages,
             ...res.map((image) => image.url),
           ]);
-          localStorage.setItem(
-            "images",
-            JSON.stringify([...res.map((image) => image.url)])
-          );
-
+          setProduct((prevProduct) => ({
+            ...prevProduct,
+            images: [...prevProduct.images, ...res.map((image) => image.url)],
+          }));
           toast.success("Upload completed.");
           toast.dismiss();
         }}
         onUploadError={(error) => {
           console.error(error.message);
-
           toast.error("Only 6 images are allowed.");
         }}
       />
