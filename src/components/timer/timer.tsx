@@ -53,7 +53,7 @@ const Timer: React.FC<TimerProps> = ({ date }) => {
   const reversedUnits = Object.entries(timeLeft).reverse();
 
   return (
-    <>
+    <div className="flex gap-2 items-center">
       {reversedUnits.map(([unit, value]) => (
         <div className="mr-2 text-center" key={unit}>
           <div className="w-11 min-h-[50px] text-primary-color inline-flex items-center justify-center text-3xl font-semibold">
@@ -62,7 +62,7 @@ const Timer: React.FC<TimerProps> = ({ date }) => {
           <div className="label">{unitLabels[unit]}</div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
