@@ -1,12 +1,15 @@
+import { Category, SubCategory } from "@prisma/client";
 import HeroSection from "./heroSection";
 import Todays from "./todays";
 
-interface HomeProps {}
+interface HomeProps {
+  categories: (Category & { subCategories: SubCategory[] | null })[] | undefined;
+}
 
-const Home = ({}: HomeProps) => {
+const Home = ({ categories }: HomeProps) => {
   return (
     <>
-      <HeroSection />
+      <HeroSection categories={categories} />
       <Todays />
       {/* BROWSE BY CATEGORY */}
       {/* BEST SELLING PRODUCT */}

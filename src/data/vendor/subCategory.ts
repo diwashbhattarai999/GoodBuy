@@ -29,3 +29,17 @@ export const getSubcategories = async () => {
     return null;
   }
 };
+
+export const getSubCategoriesByCategoryId = async (categoryId: string) => {
+  try {
+    const subcategories = await db.subCategory.findMany({
+      where: {
+        categoryId,
+      },
+    });
+
+    return subcategories;
+  } catch (error) {
+    return null;
+  }
+};
