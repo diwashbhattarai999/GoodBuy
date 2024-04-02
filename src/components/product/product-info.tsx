@@ -74,7 +74,7 @@ const ProductInfos: React.FC<ProductInfosProps> = ({ product }) => {
         {!productSize ? (
           <h2>{product?.priceRange}</h2>
         ) : (
-          <h1>{product?.price}$</h1>
+          <h1>Rs. {product?.price}</h1>
         )}
         {product?.discount ? (
           product?.discount > 0 ? (

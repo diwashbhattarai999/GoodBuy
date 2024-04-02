@@ -33,6 +33,8 @@ export const getProducts = async () => {
           include: {
             images: true,
             description_images: true,
+            sizes: true,
+            color: true,
           },
         },
       },

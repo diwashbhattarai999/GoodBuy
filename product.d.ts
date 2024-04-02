@@ -5,6 +5,8 @@ import {
   ProductDetail,
   Question,
   Review,
+  Size,
+  Style,
   SubCategory,
   SubProduct,
 } from "@prisma/client";
@@ -18,5 +20,7 @@ export interface CustomProduct extends Product {
   subProducts: (SubProduct & {
     images: Image[];
     description_images: Image[];
+    sizes: Size[];
+    color: Style;
   })[];
 }

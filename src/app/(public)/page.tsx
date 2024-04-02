@@ -2,6 +2,7 @@ import AnimationWrapper from "@/components/animations/page-animation";
 import MaxWidthContainer from "@/components/max-width-container";
 import Home from "@/components/sections/Home/Home";
 import { getCategories } from "@/data/vendor/category";
+import { getProducts } from "@/data/vendor/products";
 import { getSubCategoriesByCategoryId } from "@/data/vendor/subCategory";
 
 export default async function HomePage() {
@@ -25,10 +26,12 @@ export default async function HomePage() {
     newCategories = await Promise.all(subcategoriesPromises);
   }
 
+  const products = await getProducts();
+
   return (
     <AnimationWrapper>
       <MaxWidthContainer>
-        <Home categories={newCategories} />
+        <Home categories={newCategories} products={products} />
       </MaxWidthContainer>
     </AnimationWrapper>
   );

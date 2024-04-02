@@ -53,12 +53,12 @@ const MainSwiper: React.FC<MainSwiperProps> = ({ images, activeImg }) => {
             </div>
           ))}
         </div>
-        <div className="md:w-[360px] md:h-[479px] self-center md:self-start">
+        <div className="md:w-[360px] md:h-[479px] self-center md:self-start inner-image">
           <InnerImageZoom
             src={imgSrc}
             zoomType="hover"
             zoomPreload={true}
-            className="rounded-md"
+            className="rounded-md w-full h-full"
           />
         </div>
       </div>

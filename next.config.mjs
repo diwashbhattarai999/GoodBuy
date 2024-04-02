@@ -11,6 +11,14 @@ const nextConfig = {
         hostname: "res.cloudinary.com",
       },
       {
+        protocol: "https",
+        hostname: "fdn2.gsmarena.com",
+      },
+      {
+        protocol: "https",
+        hostname: "fdn.gsmarena.com",
+      },
+      {
         hostname: "utfs.io",
       },
     ],

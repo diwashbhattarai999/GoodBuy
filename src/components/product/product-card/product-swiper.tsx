@@ -50,7 +50,13 @@ const ProductSwiper = ({ images, imgHeight }: ProductSwiperProps) => {
       >
         {images?.map((img) => (
           <SwiperSlide key={img.url}>
-            <Image src={img.url} alt="" width={600} height={600} />
+            <Image
+              src={img.url}
+              alt="Product"
+              width={600}
+              height={600}
+              className="object-scale-down h-full w-full"
+            />
           </SwiperSlide>
         ))}
       </Swiper>

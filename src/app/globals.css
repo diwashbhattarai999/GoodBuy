@@ -108,4 +108,9 @@
     height: 2px;
     background-color: #eeeeee;
   }
+
+  .inner-image div,
+  .inner-image img {
+    @apply w-full h-full object-contain;
+  }
 }

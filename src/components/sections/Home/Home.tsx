@@ -1,4 +1,4 @@
-import { Category, SubCategory } from "@prisma/client";
+import { Category, Product, SubCategory } from "@prisma/client";
 
 import HeroSection from "./heroSection";
 import Todays from "./todays";
@@ -9,11 +9,13 @@ import Featured from "./featured";
 import { FaTruckFast } from "react-icons/fa6";
 import { FaHeadphones } from "react-icons/fa";
 import { SiAdguard } from "react-icons/si";
+import { CustomProduct } from "@/../product";
 
 interface HomeProps {
   categories:
     | (Category & { subCategories: SubCategory[] | null })[]
     | undefined;
+  products: CustomProduct[] | null;
 }
 
 const ABOUT_SERVICES = [
@@ -34,13 +36,15 @@ const ABOUT_SERVICES = [
   },
 ];
 
-const Home = ({ categories }: HomeProps) => {
+const Home = ({ categories, products }: HomeProps) => {
   return (
     <>
       <HeroSection categories={categories} />
-      <Todays />
+      <Todays products={products} />
       <Categories />
+
       {/* BEST SELLING PRODUCT */}
+
       {/* BUY NOW BANNER WITH TIMER */}
       <Image
         src="/images/banner.png"
@@ -50,11 +54,14 @@ const Home = ({ categories }: HomeProps) => {
         priority
         className="w-full h-full mb-8"
       />
+
       {/* EXPLORE OUR PRODUCT */}
       <OurProducts />
+
       {/* NEW ARRIVAL */}
       <Featured />
       {/* SERVICES */}
+
       {/* Service */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 lg:gap-24 my-16 text-center">
         {ABOUT_SERVICES.map((info, index) => (
