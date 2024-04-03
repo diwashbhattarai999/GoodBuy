@@ -99,7 +99,7 @@ const ProductInfos: React.FC<ProductInfosProps> = ({ product }) => {
         {/* Shipping */}
         <div className="text-muted-foreground">
           {product?.shipping
-            ? `+${product?.shipping}$ Shipping Fee`
+            ? `+Rs. {product?.shipping}$ Shipping Fee`
             : "Free Shipping"}
         </div>
 

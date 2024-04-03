@@ -53,9 +53,9 @@ const ProductSwiper = ({ images, imgHeight }: ProductSwiperProps) => {
             <Image
               src={img.url}
               alt="Product"
-              width={600}
-              height={600}
-              className="object-scale-down h-full w-full"
+              width="200"
+              height="200"
+              className="h-[250px] w-full object-contain"
             />
           </SwiperSlide>
         ))}

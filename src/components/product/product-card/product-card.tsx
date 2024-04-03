@@ -10,23 +10,20 @@ import Button from "@/components/ui/Button";
 import ProductSwiper from "./product-swiper";
 import { CustomProduct } from "@/../product";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/cart.context";
 
 interface NewProductCardProps {
   product: CustomProduct;
   w_full?: boolean;
-  buttonText: string;
   Icon?: IconType;
   imgHeight?: string;
-  options?: boolean;
 }
 
 const ProductCard = ({
   product,
   w_full,
-  buttonText,
   Icon,
   imgHeight,
-  options,
 }: NewProductCardProps) => {
   const [heartActive, setHeartActive] = useState(false);
   const [active, setActive] = useState(0);
@@ -59,6 +56,8 @@ const ProductCard = ({
     );
   }, [active, product?.subProducts]);
 
+  const { addToCart } = useCart();
+
   const handleWishList = () => {
     setHeartActive((prev) => !prev);
   };
@@ -79,12 +78,12 @@ const ProductCard = ({
   return (
     <div
       className={cn(
-        "pb-2 w-full bg-muted shadow-sm rounded-md",
+        "w-full shadow-sm rounded-md border border-border/40",
         !w_full && "sm:w-1/2 md:w-1/3 lg:w-1/4"
       )}
     >
       <div className="relative h-full text-center transition-all duration-1000 ease-in-out">
-        <div className="min-h-0 relative overflow-hidden mb-4">
+        <div className="min-h-0 relative overflow-hidden">
           {/* --------------- IMAGE --------------- */}
           <Link
             href={`/product/${product?.slug}?style=${active}`}
@@ -115,64 +114,27 @@ const ProductCard = ({
         </div>
 
         {/* PRODUCT INFO */}
-        <div className="pb-1 px-4 text-left text-primary-color relative">
-          <Link href={`/product/${product?.slug}?style=${active}`}>
-            <div className="mb-2 text-lg font-normal block cursor-pointer h-[56px]">
-              {productName}
+        <div className="text-left text-primary-color relative bg-muted">
+          <div className="p-4">
+            <Link href={`/product/${product?.slug}?style=${active}`}>
+              <div className="mb-2 text-lg font-normal block cursor-pointer h-[56px]">
+                {productName}
+              </div>
+            </Link>
+            <div className="mb-5">
+              <span className="text-lg">{productPrice}</span>
+              {/* <s className="text-sm text-gray-color">Rs 423</s> */}
             </div>
-          </Link>
-          <div className="mb-5">
-            <span className="text-lg">{productPrice}</span>
-            {/* <s className="text-sm text-gray-color">Rs 423</s> */}
+            <Button
+              full
+              icon
+              className="bg-accent text-accent-foreground hover:bg-accent/95"
+              onClick={() => addToCart(product.id)}
+            >
+              {Icon && <Icon />}
+              Add To Cart
+            </Button>
           </div>
-          {!options && (
-            <div className="flex gap-2 mb-4">
-              {styles &&
-                styles.map((style, i) =>
-                  style.image ? (
-                    <Image
-                      key={i}
-                      src={style.image}
-                      alt=""
-                      width={30}
-                      height={30}
-                      className={`
-                      rounded-full w-[30px] h-[30px] cursor-pointer
-                      object-cover shadow-md 
-                      outline-offset-2 outline hover:outline-primary-color
-                      transition-all duration-500
-                      ${i == active && "outline-primary-color"} 
-                    `}
-                      onMouseOver={() => {
-                        setImages(product.subProducts[i].images);
-                        setActive(i);
-                      }}
-                    />
-                  ) : (
-                    <span
-                      key={i}
-                      className={`
-                    bg-white 
-                    w-[30px] h-[30px] rounded-full
-                    shadow-md overflow-hidden
-                  `}
-                      onMouseOver={() => {
-                        setImages(product.subProducts[i].images);
-                        setActive(i);
-                      }}
-                    ></span>
-                  )
-                )}
-            </div>
-          )}
-          <Button
-            full
-            icon
-            className="bg-accent text-accent-foreground hover:bg-accent/95"
-          >
-            {Icon && <Icon />}
-            {buttonText}
-          </Button>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CgMenuRight, CgClose } from "react-icons/cg";
@@ -13,10 +14,13 @@ import { NAV_LINKS } from "@/constants";
 import useOnClickOutside from "@/hooks/use-on-click-outside";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
+import { cn } from "@/lib/utils";
+
 import MaxWidthContainer from "@/components/max-width-container";
 import MobileMenu from "@/components/ui/mobile-menu";
 import UserProfile from "@/components/user-profile/user-profile";
 import NavBanner from "@/components/sections//Banner";
+import { useCart } from "@/context/cart.context";
 
 interface NavbarProps {
   showNavBanner?: boolean;
@@ -24,10 +28,13 @@ interface NavbarProps {
 
 const Navbar = ({ showNavBanner }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showCart, setShowCart] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname().split("/")[1];
+
+  const { cartItems } = useCart();
 
   const handleMenu = () => {
     setIsMenuOpen((currentValue) => !currentValue);
@@ -44,8 +51,17 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
 
   const user = useCurrentUser();
 
+  const totalCartPrice = cartItems.reduce((total, item) => {
+    const itemPrice =
+      item.product.subProducts[0].sizes[0].price * item.quantity;
+    return total + itemPrice;
+  }, 0);
+
   return (
-    <nav className=" border-b border-b-border/50 backdrop-blur dark:bg-background/90 bg-background/90 fixed w-full top-0 z-40">
+    <nav
+      className=" border-b border-b-border/50 backdrop-blur dark:bg-background/90 bg-background/90 fixed w-full top-0 z-40"
+      onMouseLeave={() => setShowCart(false)}
+    >
       {showNavBanner && <NavBanner />}
       <MaxWidthContainer>
         <div className="py-4 w-full flex items-center justify-between">
@@ -135,10 +151,94 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
                 </Link>
               </li>
 
-              <li>
+              <li className="relative" onMouseOver={() => setShowCart(true)}>
                 <Link href="/cart">
-                  <LuShoppingCart className="w-10 h-10 rounded-full p-2 hover:bg-muted duration-300" />
+                  <LuShoppingCart className="w-10 h-10 p-2" />
                 </Link>
+                <div className="absolute -top-1 -right-1 font-semibold">
+                  {cartItems.length}
+                </div>
+                <div
+                  className={cn(
+                    "hidden md:block bg-background p-4 rounded-md absolute top-12 shadow-md border border-border right-0 duration-300",
+                    cartItems.length <= 0
+                      ? "md:min-w-[300px]"
+                      : "md:min-w-[400px]",
+                    showCart
+                      ? "translate-y-0 opacity-100 pointer-events-auto"
+                      : "-translate-y-3 opacity-0 pointer-events-none"
+                  )}
+                >
+                  {cartItems.length <= 0 ? (
+                    <div className="w-full flex items-center justify-center gap-6">
+                      <Image
+                        src="/images/no-cart.jpg"
+                        alt="no-cart"
+                        width={100}
+                        height={100}
+                        className=""
+                      />
+                      <p className="text-lg font-medium text-muted-foreground">
+                        Cart is Empty
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-4">
+                      <h1 className="font-semibold text-lg underline">
+                        Cart Items
+                      </h1>
+                      {cartItems.slice(0, 2).map((item, i) => {
+                        return (
+                          <div
+                            key={item.product.id}
+                            className="bg-muted rounded-md px-2 py-4 border border-border"
+                          >
+                            <div className="flex items-center justify-between gap-4">
+                              <Image
+                                src={item.product.subProducts[0].images[0].url}
+                                alt={item.product.name}
+                                width={40}
+                                height={40}
+                              />
+                              <div className="flex-1">
+                                <p className="text-lg text-muted-foreground">
+                                  {item.product.name}
+                                </p>
+                                <p className="text-lg  text-muted-foreground">
+                                  Rs.{" "}
+                                  {item.product.subProducts[0].sizes[0].price}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <p className="text-lg  text-muted-foreground">
+                                x {item.quantity}
+                              </p>
+                              <p className="text-lg font-medium text-muted-foreground">
+                                Total: Rs.
+                                {item.product.subProducts[0].sizes[0].price *
+                                  item.quantity}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+
+                      <Link href="/cart" className="underline text-right">
+                        See all
+                      </Link>
+
+                      <div className="flex justify-between items-center text-muted-foreground">
+                        <span className="font-semibold text-lg">
+                          Total Price:
+                        </span>
+                        <span className="font-medium text-base pr-[6px]">
+                          Rs. {totalCartPrice}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </li>
 
               {user && <UserProfile />}

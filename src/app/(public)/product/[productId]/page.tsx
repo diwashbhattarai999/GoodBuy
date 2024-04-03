@@ -6,7 +6,7 @@ import {
   GetProductBySlugSubProductType,
   GetProductBySlugType,
   getProductBySlug,
-} from "@/data/products/product";
+} from "@/data/user/product";
 
 import { CustomProduct } from "@/../product";
 
@@ -139,7 +139,12 @@ export default async function ProductPage({
   return (
     <AnimationWrapper>
       <MaxWidthContainer>
-        <BreadCrumbs product={newProduct} />
+        <BreadCrumbs
+          activeClasses="text-accent"
+          containerClasses="flex py-5"
+          listClasses="hover:underline font-bold"
+          capitalizeLinks
+        />
         <div className="bg-white p-2 mb-2 relative">
           <div className="flex max-md:flex-col gap-6">
             <MainSwiper images={newProduct.images} />

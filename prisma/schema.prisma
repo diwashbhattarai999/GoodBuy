@@ -29,9 +29,10 @@ model User {
   twoFactorConfirmation   TwoFactorConfirmation?
   twoFactorConfirmationId String?                @db.ObjectId
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   Review    Review[]
+  CartItem  CartItem[]
 }
 
 model Account {
@@ -107,6 +108,7 @@ model Product {
   numReviews    Int             @default(0)
   shipping      Float
   subProducts   SubProduct[]
+  CartItem      CartItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -160,7 +162,7 @@ model Size {
 }
 
 model ProductDetail {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   value     String
   Product   Product @relation(fields: [productId], references: [id])
@@ -218,4 +220,17 @@ model Like {
   likes    String
   Review   Review? @relation(fields: [reviewId], references: [id])
   reviewId String? @db.ObjectId
+}
+
+model CartItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @db.ObjectId
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String   @db.ObjectId
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId])
 }

@@ -20,7 +20,6 @@ const Todays = ({ products }: ITodaysProps) => {
             <ProductCard
               key={product.id}
               product={product}
-              buttonText="Add to Cart"
               Icon={BsFillCartPlusFill}
               imgHeight="h-[280px]"
             />

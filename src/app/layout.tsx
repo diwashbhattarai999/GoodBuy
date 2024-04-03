@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 
 import { auth } from "@/auth";
 
@@ -8,12 +9,10 @@ import { siteConfig } from "@/config";
 
 import { cn } from "@/lib/utils";
 
+import { CartProvider } from "@/context/cart.context";
+
 import "./globals.css";
 import "@uploadthing/react/styles.css";
-
-import Footer from "@/components/sections/Footer/Footer";
-import Navbar from "@/components/sections/Navbar";
-import { Toaster } from "react-hot-toast";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -32,17 +31,19 @@ export default async function RootLayout({
 
   return (
     <SessionProvider session={session}>
-      <html lang="en">
-        <body
-          className={cn(
-            montserrat.variable,
-            "antialiased flex flex-col min-h-screen bg-background text-foreground"
-          )}
-        >
-          {children}
-          <Toaster />
-        </body>
-      </html>
+      <CartProvider>
+        <html lang="en">
+          <body
+            className={cn(
+              montserrat.variable,
+              "antialiased flex flex-col min-h-screen bg-background text-foreground"
+            )}
+          >
+            {children}
+            <Toaster position="top-center" />
+          </body>
+        </html>
+      </CartProvider>
     </SessionProvider>
   );
 }
