@@ -184,3 +184,35 @@ export const CreateProductSchema = z.object({
   image: z.optional(z.array(z.string())),
   color: z.optional(z.string()),
 });
+
+export const CheckoutSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }),
+  email: z
+    .string()
+    .min(1, {
+      message: "Email is required",
+    })
+    .email({
+      message: "Please provide a valid email",
+    }),
+  phone: z
+    .string()
+    .min(10, {
+      message: "Phone Number must be 10 digits",
+    })
+    .max(10, { message: "Phone Number must be 10 digits" }),
+  state: z.string().min(1, {
+    message: "State is required",
+  }),
+  city: z.string().min(1, {
+    message: "Town/City is required",
+  }),
+  address: z.string().min(1, {
+    message: "Address is required",
+  }),
+  street: z.string().min(1, {
+    message: "Street is required",
+  }),
+  saveInfo: z.optional(z.boolean()),
+  paymentMethod: z.optional(z.enum(["cashOnDelivery", "online"])),
+});

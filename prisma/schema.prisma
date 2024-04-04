@@ -28,11 +28,11 @@ model User {
   isTwoFactorEnabled      Boolean                @default(false)
   twoFactorConfirmation   TwoFactorConfirmation?
   twoFactorConfirmationId String?                @db.ObjectId
-
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  Review    Review[]
-  CartItem  CartItem[]
+  Review                  Review[]
+  CartItem                CartItem[]
+  ShippingAdress          ShippingAdress[]
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
 }
 
 model Account {
@@ -233,4 +233,19 @@ model CartItem {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, productId])
+}
+
+model ShippingAdress {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?  @unique @db.ObjectId
+  name      String
+  email     String
+  phone     String
+  state     String
+  city      String
+  address   String
+  street    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

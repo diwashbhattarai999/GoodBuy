@@ -1,6 +1,10 @@
 "use client";
 
-import { HTMLInputTypeAttribute, useState } from "react";
+import {
+  HTMLInputAutoCompleteAttribute,
+  HTMLInputTypeAttribute,
+  useState,
+} from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { IconType } from "react-icons/lib";
@@ -18,6 +22,7 @@ interface InputProps {
   error?: string;
   disabled?: boolean;
   onChange?: (value: string | number | undefined) => void;
+  autocomplete?: HTMLInputAutoCompleteAttribute;
 }
 
 const Input = ({
@@ -31,6 +36,7 @@ const Input = ({
   disabled,
   register,
   onChange,
+  autocomplete,
 }: InputProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -77,6 +83,7 @@ const Input = ({
             onChange={(e) => {
               onChange && onChange(e.target.value);
             }}
+            autoComplete={autocomplete}
           />
         </div>
 

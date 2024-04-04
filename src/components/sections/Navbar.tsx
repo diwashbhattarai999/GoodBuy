@@ -155,7 +155,7 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
                 <Link href="/cart">
                   <LuShoppingCart className="w-10 h-10 p-2" />
                 </Link>
-                <div className="absolute -top-1 -right-1 font-semibold">
+                <div className="absolute -top-1 -right-2 font-semibold bg-accent text-accent-foreground p-1 rounded-full h-6 min-w-6 flex items-center justify-center">
                   {cartItems.length}
                 </div>
                 <div

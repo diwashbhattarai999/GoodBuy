@@ -1,8 +1,8 @@
-import Cart from "@/components/sections/cart/Cart";
 import MaxWidthContainer from "@/components/max-width-container";
 import Breadcrumbs from "@/components/product/bread-crumbs";
+import Checkout from "@/components/sections/cart/Checkout";
 
-const CartPage = async () => {
+const CheckoutPage = async () => {
   return (
     <MaxWidthContainer>
       <Breadcrumbs
@@ -11,9 +11,9 @@ const CartPage = async () => {
         listClasses="hover:underline font-bold"
         capitalizeLinks
       />
-      <Cart />
+      <Checkout />
     </MaxWidthContainer>
   );
 };
 
-export default CartPage;
+export default CheckoutPage;
