@@ -35,16 +35,27 @@ export const registerAction = async (
     return { error: "Email already in use!" };
   }
 
-  await db.user.create({
-    data: {
-      name,
-      email,
-      role,
-      companyName,
-      panNo,
-      password: hashedPassword,
-    },
-  });
+  if (role === "USER") {
+    await db.user.create({
+      data: {
+        name,
+        email,
+        role,
+        password: hashedPassword,
+      },
+    });
+  } else {
+    await db.user.create({
+      data: {
+        name,
+        email,
+        role,
+        companyName,
+        panNo,
+        password: hashedPassword,
+      },
+    });
+  }
 
   const verificationToken = await generateVerificationToken(email);
   await sendVerificationEmail(verificationToken.email, verificationToken.token);

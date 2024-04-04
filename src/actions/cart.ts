@@ -88,8 +88,15 @@ export const clearCartItem = async (id: string) => {
 };
 
 export const getAllCartItems = async () => {
+  const user = await currentUser();
+  if (!user) return null;
+
+  const dbUser = await getUserById(user.id as string);
+  if (!dbUser) return null;
+
   try {
     const cartItems = await db.cartItem.findMany({
+      where: { userId: user.id },
       include: {
         product: {
           include: {

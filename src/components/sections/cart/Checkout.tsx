@@ -99,7 +99,6 @@ const Checkout = () => {
             icon={LuUserCircle}
             error={errors.name?.message}
             disabled={isPending}
-            autocomplete="off"
             register={register("name")}
           />
 
@@ -113,7 +112,6 @@ const Checkout = () => {
             icon={LuMail}
             error={errors.email?.message}
             disabled={isPending}
-            autocomplete="off"
             register={register("email")}
           />
 
@@ -127,7 +125,6 @@ const Checkout = () => {
             icon={LuPhone}
             error={errors.phone?.message}
             disabled={isPending}
-            autocomplete="off"
             register={register("phone")}
           />
 
@@ -141,7 +138,6 @@ const Checkout = () => {
             icon={LuMap}
             error={errors.state?.message}
             disabled={isPending}
-            autocomplete="off"
             register={register("state")}
           />
 
@@ -155,7 +151,6 @@ const Checkout = () => {
             icon={FaCity}
             error={errors.city?.message}
             disabled={isPending}
-            autocomplete="off"
             register={register("city")}
           />
 
@@ -169,7 +164,6 @@ const Checkout = () => {
             icon={FaLocationDot}
             error={errors.address?.message}
             disabled={isPending}
-            autocomplete="off"
             register={register("address")}
           />
 
@@ -183,7 +177,6 @@ const Checkout = () => {
             icon={FaStreetView}
             error={errors.street?.message}
             disabled={isPending}
-            autocomplete="off"
             register={register("street")}
           />
 

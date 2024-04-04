@@ -49,7 +49,9 @@ export const login = async (
       verificationToken.token
     );
 
-    return { success: "Confirmation email Sent!" };
+    return {
+      success: "A verification email has been sent. Please check your inbox.",
+    };
   }
 
   const passwordMatch = await bcrypt.compare(password, existingUser.password);

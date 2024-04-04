@@ -80,9 +80,7 @@ const Input = ({
                 ? "border-destructive focus:border-destructive"
                 : "border-input focus:border-secondary-foreground"
             )}
-            onChange={(e) => {
-              onChange && onChange(e.target.value);
-            }}
+            
             autoComplete={autocomplete}
           />
         </div>

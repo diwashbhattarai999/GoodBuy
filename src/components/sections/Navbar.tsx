@@ -21,6 +21,7 @@ import MobileMenu from "@/components/ui/mobile-menu";
 import UserProfile from "@/components/user-profile/user-profile";
 import NavBanner from "@/components/sections//Banner";
 import { useCart } from "@/context/cart.context";
+import Button from "../ui/Button";
 
 interface NavbarProps {
   showNavBanner?: boolean;
@@ -155,9 +156,11 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
                 <Link href="/cart">
                   <LuShoppingCart className="w-10 h-10 p-2" />
                 </Link>
+
                 <div className="absolute -top-1 -right-2 font-semibold bg-accent text-accent-foreground p-1 rounded-full h-6 min-w-6 flex items-center justify-center">
                   {cartItems.length}
                 </div>
+
                 <div
                   className={cn(
                     "hidden md:block bg-background p-4 rounded-md absolute top-12 shadow-md border border-border right-0 duration-300",
@@ -170,17 +173,23 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
                   )}
                 >
                   {cartItems.length <= 0 ? (
-                    <div className="w-full flex items-center justify-center gap-6">
-                      <Image
-                        src="/images/no-cart.jpg"
-                        alt="no-cart"
-                        width={100}
-                        height={100}
-                        className=""
-                      />
-                      <p className="text-lg font-medium text-muted-foreground">
-                        Cart is Empty
-                      </p>
+                    <div className="flex flex-col items-center justify-center w-full gap-8">
+                      <div className="w-full flex items-center justify-center gap-6">
+                        <Image
+                          src="/images/no-cart.jpg"
+                          alt="no-cart"
+                          width={100}
+                          height={100}
+                        />
+                        <p className="text-lg font-medium text-muted-foreground">
+                          Cart is Empty
+                        </p>
+                      </div>
+                      {!user && (
+                        <Link href="/login" className="w-full">
+                          <Button full>Signin / Register</Button>
+                        </Link>
+                      )}
                     </div>
                   ) : (
                     <div className="flex flex-col gap-4">

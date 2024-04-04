@@ -54,9 +54,9 @@ export default auth(async (req) => {
     return Response.redirect(new URL("/admin/dashboard", nextUrl));
   }
 
-  if (isLoggedIn && user?.role !== UserRole.VENDOR) {
-    return Response.redirect(new URL("/login", nextUrl));
-  }
+  // if (isLoggedIn && user?.role !== UserRole.VENDOR) {
+  //   return Response.redirect(new URL("/login", nextUrl));
+  // }
 
   if (isLoggedIn && isVendor) {
     return Response.redirect(new URL("/vendor/dashboard", nextUrl));

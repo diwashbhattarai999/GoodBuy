@@ -11,6 +11,7 @@ import {
   getAllCartItems,
 } from "@/actions/cart";
 import { CartItem } from "@prisma/client";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 export interface CartItemWithProduct extends CartItem {
   product: CustomProduct;
@@ -44,13 +45,18 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItemWithProduct[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const user = useCurrentUser();
+
   useEffect(() => {
-    setLoading(true);
-    getAllCartItems().then((cartItems) => {
-      setCartItems(cartItems || []);
-      setLoading(false);
-    });
-  }, []);
+    if (user) {
+      setLoading(true);
+
+      getAllCartItems().then((cartItems) => {
+        setCartItems(cartItems || []);
+        setLoading(false);
+      });
+    }
+  }, [user]);
 
   const addToCart = async (productId: string) => {
     try {
