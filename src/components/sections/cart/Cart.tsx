@@ -43,7 +43,7 @@ const Cart = () => {
 
   const selectedItemsTotalShipping = cartItems.reduce((total, item) => {
     if (selectedItems.includes(item.product.id)) {
-      const itemShipping = item.product.shipping * item.quantity;
+      const itemShipping = item.product.shipping;
       return total + itemShipping;
     }
     return total;

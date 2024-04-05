@@ -51,10 +51,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     if (user) {
       setLoading(true);
 
-      getAllCartItems().then((cartItems) => {
-        setCartItems(cartItems || []);
-        setLoading(false);
-      });
+      getAllCartItems()
+        .then((cartItems) => {
+          setCartItems(cartItems || []);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
     }
   }, [user]);
 
@@ -67,12 +72,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
         const updatedCartItems = await getAllCartItems();
         setCartItems(updatedCartItems || []);
+        setLoading(false);
       } else if (data.error) {
         toast.error(data.error);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
-    } finally {
       setLoading(false);
     }
   };
@@ -86,12 +92,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
         const updatedCartItems = await getAllCartItems();
         setCartItems(updatedCartItems || []);
+        setLoading(false);
       } else if (data.error) {
         toast.error(data.error);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
-    } finally {
       setLoading(false);
     }
   };
@@ -105,12 +112,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
         const updatedCartItems = await getAllCartItems();
         setCartItems(updatedCartItems || []);
+        setLoading(false);
       } else if (data.error) {
         toast.error(data.error);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
-    } finally {
       setLoading(false);
     }
   };
