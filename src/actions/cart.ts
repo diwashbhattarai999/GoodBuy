@@ -3,38 +3,89 @@
 import { db } from "@/lib/db";
 import { currentUser } from "@/lib/auth";
 import { getUserById } from "@/data/user";
-import { getCartItemByUserIdAndProductId } from "@/data/user/cart";
+import { getCartItemByUserIdAndSubProductId } from "@/data/user/cart";
+import {
+  Category,
+  Image,
+  ProductDetail,
+  Question,
+  Review,
+  Size,
+  Style,
+  SubCategory,
+  SubProduct,
+  User,
+} from "@prisma/client";
 
 // Add CartItem function
-export const addCartItem = async (productId: string) => {
+export const addCartItem = async (subProductId: string) => {
   const user = await currentUser();
   if (!user) return { error: "Unauthorized!" };
 
   const dbUser = await getUserById(user.id as string);
   if (!dbUser) return { error: "Unauthorized!" };
 
-  const existingCartItem = await getCartItemByUserIdAndProductId(
+  const existingCartItem = await getCartItemByUserIdAndSubProductId(
     user.id as string,
-    productId
+    subProductId
   );
 
   if (existingCartItem) {
     const updatedCartItem = await db.cartItem.update({
-      where: { id: existingCartItem.id, userId: user.id, productId: productId },
+      where: { id: existingCartItem.id, userId: user.id },
       data: {
         quantity: existingCartItem.quantity + 1,
+        subProductId,
       },
-      include: { product: true },
+      include: {
+        subProduct: {
+          include: {
+            color: true,
+            images: true,
+            description_images: true,
+            sizes: true,
+            product: {
+              include: {
+                category: true,
+                subCategories: true,
+                details: true,
+                questions: true,
+                Order: true,
+                reviews: true,
+              },
+            },
+          },
+        },
+      },
     });
     return { success: "CartItem Updated!", updatedCartItem };
   } else {
     const newCartItem = await db.cartItem.create({
       data: {
         userId: user.id,
-        productId: productId,
+        subProductId,
         quantity: 1,
       },
-      include: { product: true },
+      include: {
+        subProduct: {
+          include: {
+            color: true,
+            images: true,
+            description_images: true,
+            sizes: true,
+            product: {
+              include: {
+                category: true,
+                subCategories: true,
+                details: true,
+                questions: true,
+                Order: true,
+                reviews: true,
+              },
+            },
+          },
+        },
+      },
     });
     return { success: "CartItem Added!", newCartItem };
   }
@@ -63,7 +114,26 @@ export const deleteCartItem = async (id: string) => {
       data: {
         quantity: existingCartItem.quantity - 1,
       },
-      include: { product: true },
+      include: {
+        subProduct: {
+          include: {
+            color: true,
+            images: true,
+            description_images: true,
+            sizes: true,
+            product: {
+              include: {
+                category: true,
+                subCategories: true,
+                details: true,
+                questions: true,
+                Order: true,
+                reviews: true,
+              },
+            },
+          },
+        },
+      },
     });
     return { success: "CartItem Quantity Decreased!", updatedCartItem };
   }
@@ -98,19 +168,20 @@ export const getAllCartItems = async () => {
     const cartItems = await db.cartItem.findMany({
       where: { userId: user.id },
       include: {
-        product: {
+        subProduct: {
           include: {
-            category: true,
-            subCategories: true,
-            details: true,
-            questions: true,
-            reviews: true,
-            subProducts: {
+            color: true,
+            images: true,
+            description_images: true,
+            sizes: true,
+            product: {
               include: {
-                images: true,
-                description_images: true,
-                sizes: true,
-                color: true,
+                category: true,
+                subCategories: true,
+                details: true,
+                questions: true,
+                Order: true,
+                reviews: true,
               },
             },
           },

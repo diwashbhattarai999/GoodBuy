@@ -27,23 +27,21 @@ const Cart = () => {
   const [selectAll, setSelectAll] = useState(false);
 
   const totalCartPrice = cartItems.reduce((total, item) => {
-    const itemPrice =
-      item.product.subProducts[0].sizes[0].price * item.quantity;
+    const itemPrice = item.subProduct.sizes[0].price * item.quantity;
     return total + itemPrice;
   }, 0);
 
   const selectedItemsSubtotal = cartItems.reduce((total, item) => {
-    if (selectedItems.includes(item.product.id)) {
-      const itemPrice =
-        item.product.subProducts[0].sizes[0].price * item.quantity;
+    if (selectedItems.includes(item.subProductId)) {
+      const itemPrice = item.subProduct.sizes[0].price * item.quantity;
       return total + itemPrice;
     }
     return total;
   }, 0);
 
   const selectedItemsTotalShipping = cartItems.reduce((total, item) => {
-    if (selectedItems.includes(item.product.id)) {
-      const itemShipping = item.product.shipping;
+    if (selectedItems.includes(item.subProductId)) {
+      const itemShipping = item.subProduct.product.shipping;
       return total + itemShipping;
     }
     return total;
@@ -67,7 +65,7 @@ const Cart = () => {
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     if (!selectAll) {
-      const allItemIds = cartItems.map((item) => item.product.id);
+      const allItemIds = cartItems.map((item) => item.subProductId);
       setSelectedItems(allItemIds);
     } else {
       setSelectedItems([]);
@@ -123,49 +121,47 @@ const Cart = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {cartItems.slice(0, 2).map((item, i) => (
+              {cartItems.map((item) => (
                 <TableRow
-                  key={item.product.id}
-                  onClick={() => handleCheckboxChange(item.product.id)}
+                  key={item.id}
+                  onClick={() => handleCheckboxChange(item.subProductId)}
                 >
                   <TableCell>
                     <input
                       type="checkbox"
-                      checked={selectedItems.includes(item.product.id)}
-                      onChange={() => handleCheckboxChange(item.product.id)}
+                      checked={selectedItems.includes(item.subProductId)}
+                      onChange={() => handleCheckboxChange(item.subProductId)}
                       className="w-4 h-4"
                     />
                   </TableCell>
                   <TableCell colSpan={2} className="font-medium">
                     <div className="flex items-center gap-4">
                       <Image
-                        src={item.product.subProducts[0].images[0].url}
-                        alt={item.product.name}
+                        src={item.subProduct.images[0].url}
+                        alt={item.subProduct.product.name}
                         width={40}
                         height={40}
                       />
 
                       <div>
                         <p className="text-lg text-muted-foreground">
-                          {item.product.name}
+                          {item.subProduct.product.name}
                         </p>
                         <p className="text-muted-foreground/70">
-                          {item.product.shipping === 0
+                          {item.subProduct.product.shipping === 0
                             ? "Free Delivery"
-                            : `Rs. ${item.product.shipping} Shipping Fee`}
+                            : `Rs. ${item.subProduct.product.shipping} Shipping Fee`}
                         </p>
                       </div>
                     </div>
                   </TableCell>
 
-                  <TableCell>
-                    Rs. {item.product.subProducts[0].sizes[0].price}
-                  </TableCell>
+                  <TableCell>Rs. {item.subProduct.sizes[0].price}</TableCell>
 
                   <TableCell>
                     <div className="flex gap-1">
                       <Button
-                        onClick={() => addToCart(item.productId)}
+                        onClick={() => addToCart(item.subProductId)}
                         icon
                         className="border border-border rounded-md px-2 py-1 hover:text-muted-foreground"
                       >
@@ -186,7 +182,7 @@ const Cart = () => {
 
                   <TableCell>
                     Total: Rs.
-                    {item.product.subProducts[0].sizes[0].price * item.quantity}
+                    {item.subProduct.sizes[0].price * item.quantity}
                   </TableCell>
                   <TableCell className="text-right">
                     <BsTrash

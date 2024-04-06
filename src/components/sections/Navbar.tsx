@@ -53,8 +53,8 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
   const user = useCurrentUser();
 
   const totalCartPrice = cartItems.reduce((total, item) => {
-    const itemPrice =
-      item.product.subProducts[0].sizes[0].price * item.quantity;
+    const itemPrice = item.subProduct.sizes[0].price * item.quantity;
+
     return total + itemPrice;
   }, 0);
 
@@ -196,26 +196,25 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
                       <h1 className="font-semibold text-lg underline">
                         Cart Items
                       </h1>
-                      {cartItems.slice(0, 2).map((item, i) => {
+                      {cartItems.slice(0, 2).map((item) => {
                         return (
                           <div
-                            key={item.product.id}
+                            key={item.id}
                             className="bg-muted rounded-md px-2 py-4 border border-border"
                           >
                             <div className="flex items-center justify-between gap-4">
                               <Image
-                                src={item.product.subProducts[0].images[0].url}
-                                alt={item.product.name}
+                                src={item.subProduct.images[0].url}
+                                alt={item.subProduct.product.name}
                                 width={40}
                                 height={40}
                               />
                               <div className="flex-1">
                                 <p className="text-lg text-muted-foreground">
-                                  {item.product.name}
+                                  {item.subProduct.product.name}
                                 </p>
                                 <p className="text-lg  text-muted-foreground">
-                                  Rs.{" "}
-                                  {item.product.subProducts[0].sizes[0].price}
+                                  Rs. {item.subProduct.sizes[0].price}
                                 </p>
                               </div>
                             </div>
@@ -225,8 +224,7 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
                               </p>
                               <p className="text-lg font-medium text-muted-foreground">
                                 Total: Rs.
-                                {item.product.subProducts[0].sizes[0].price *
-                                  item.quantity}
+                                {item.subProduct.sizes[0].price * item.quantity}
                               </p>
                             </div>
                           </div>

@@ -1,12 +1,12 @@
 import { db } from "@/lib/db";
 
-export const getCartItemByUserIdAndProductId = async (
+export const getCartItemByUserIdAndSubProductId = async (
   userId: string,
-  productId: string
+  subProductId: string
 ) => {
   try {
     const cartItem = await db.cartItem.findUnique({
-      where: { userId_productId: { userId, productId } },
+      where: { userId_subProductId: { userId, subProductId } },
     });
 
     return cartItem;

@@ -97,3 +97,33 @@ export const khaltiPay = async (payload: IPayload) => {
     return { error: err.data?.detail };
   }
 };
+
+export const khaltiCheckoutSuccess = async (pidx: string) => {
+  const res = await axios.post(
+    "https://a.khalti.com/api/v2/epayment/lookup/",
+    {
+      pidx,
+    },
+    {
+      headers: {
+        Authorization: `Key ${process.env.KHALTI_SECRET_KEY}`,
+      },
+    }
+  );
+  return {
+    data: res?.data as {
+      pidx: string;
+      total_amount: number;
+      status:
+        | "Completed"
+        | "Pending"
+        | "Initiated"
+        | "Refunded"
+        | "Expired"
+        | "User canceled";
+      transaction_id: string;
+      fee: number;
+      refunded: boolean;
+    },
+  };
+};

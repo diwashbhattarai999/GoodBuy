@@ -169,7 +169,9 @@ const ProductCard = ({
               full
               icon
               className="bg-accent text-accent-foreground hover:bg-accent/95"
-              onClick={() => addToCart(product.id)}
+              onClick={() =>
+                addToCart(product?.subProducts[active]?.id)
+              }
             >
               {Icon && <Icon />}
               Add To Cart

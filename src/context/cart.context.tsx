@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { CustomProduct } from "@/../product";
+import { ICartItem } from "@/../product";
 import toast from "react-hot-toast";
 import {
   addCartItem,
@@ -10,18 +10,13 @@ import {
   deleteCartItem,
   getAllCartItems,
 } from "@/actions/cart";
-import { CartItem } from "@prisma/client";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
-export interface CartItemWithProduct extends CartItem {
-  product: CustomProduct;
-}
-
 interface CartContextType {
-  cartItems: CartItemWithProduct[];
-  addToCart: (productId: string) => void;
-  removeFromCart: (productId: string) => void;
-  clearCart: (productId: string) => void;
+  cartItems: ICartItem[];
+  addToCart: (subProductId: string) => void;
+  removeFromCart: (cartItemId: string) => void;
+  clearCart: (cartItemId: string) => void;
   loading: boolean;
 }
 
@@ -42,7 +37,7 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cartItems, setCartItems] = useState<CartItemWithProduct[]>([]);
+  const [cartItems, setCartItems] = useState<ICartItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   const user = useCurrentUser();
@@ -63,10 +58,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [user]);
 
-  const addToCart = async (productId: string) => {
+  const addToCart = async (subProductId: string) => {
     try {
       setLoading(true);
-      const data = await addCartItem(productId);
+      const data = await addCartItem(subProductId);
       if (data.success) {
         toast.success(data.success);
 
@@ -83,10 +78,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const removeFromCart = async (productId: string) => {
+  const removeFromCart = async (subProductId: string) => {
     try {
       setLoading(true);
-      const data = await deleteCartItem(productId);
+      const data = await deleteCartItem(subProductId);
       if (data.success) {
         toast.success(data.success);
 
@@ -103,10 +98,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const clearCart = async (productId: string) => {
+  const clearCart = async (subProductId: string) => {
     try {
       setLoading(false);
-      const data = await clearCartItem(productId);
+      const data = await clearCartItem(subProductId);
       if (data.success) {
         toast.success(data.success);
 

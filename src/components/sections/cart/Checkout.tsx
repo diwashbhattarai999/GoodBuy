@@ -54,11 +54,11 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const productId = searchParams.get("checkoutItems");
-  const productIds = productId?.split(",") || [];
+  const subProductId = searchParams.get("checkoutItems");
+  const subProductIds = subProductId?.split(",") || [];
 
   const checkoutItems = cartItems.filter((cartItem) =>
-    productIds.includes(cartItem.productId)
+    subProductIds.includes(cartItem.subProductId)
   );
 
   const total = searchParams.get("total") as string;
@@ -100,16 +100,17 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
           amount: parseInt(shipping),
         },
       ],
-      product_details: cartItems.map((cartItem) => {
+      product_details: checkoutItems.map((checkoutItem) => {
         return {
-          identity: cartItem.id,
-          name: cartItem.product.name,
-          total_price:
-            (cartItem.product.subProducts[0].sizes[0].price +
-              cartItem.product.shipping) *
-            cartItem.quantity,
-          quantity: cartItem.quantity,
-          unit_price: cartItem.product.subProducts[0].sizes[0].price,
+          identity: checkoutItem.id,
+          name: checkoutItem.subProduct.product.name,
+          total_price: Math.floor(
+            (checkoutItem.subProduct.sizes[0].price +
+              checkoutItem.subProduct.product.shipping) *
+              checkoutItem.quantity
+          ),
+          quantity: checkoutItem.quantity,
+          unit_price: Math.floor(checkoutItem.subProduct.sizes[0].price),
         };
       }),
       merchant_username: "Diwash Bhattarai",
@@ -132,6 +133,11 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
           .catch(() => setError("Something went wrong"));
       }
 
+      sessionStorage.setItem(
+        "cartItemIds",
+        JSON.stringify(checkoutItems.map((checkoutItem) => checkoutItem.id))
+      );
+
       if (values.paymentMethod === "online") {
         khaltiPay(payload)
           .then((data) => {
@@ -146,9 +152,7 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
       }
 
       if (values.paymentMethod === "cashOnDelivery") {
-        router.push(
-          `checkout/success?paymentMethod=cashOnDelivery?products=${productId}`
-        );
+        router.push(`checkout/success?paymentMethod=cashOnDelivery`);
       }
     });
   };
@@ -281,7 +285,7 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
 
             <div className="w-full md:basis-[45%] border border-border rounded-sm p-4">
               <ul className="flex flex-col gap-8">
-                {checkoutItems.map((checkoutItem, i) => {
+                {checkoutItems.map((checkoutItem) => {
                   return (
                     <li
                       key={checkoutItem.id}
@@ -289,18 +293,16 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
                     >
                       <div className="flex gap-4 items-center max-w-[75%]">
                         <Image
-                          src={
-                            checkoutItem.product.subProducts[0].images[0].url
-                          }
-                          alt={checkoutItem.product.name}
+                          src={checkoutItem.subProduct.images[0].url}
+                          alt={checkoutItem.subProduct.product.name}
                           width={40}
                           height={40}
                         />
 
-                        <p>{checkoutItem.product.name}</p>
+                        <p>{checkoutItem.subProduct.product.name}</p>
                       </div>
                       <p className="w-fit">
-                        Rs. {checkoutItem.product.subProducts[0].sizes[0].price}
+                        Rs. {checkoutItem.subProduct.sizes[0].price}
                       </p>
                     </li>
                   );
