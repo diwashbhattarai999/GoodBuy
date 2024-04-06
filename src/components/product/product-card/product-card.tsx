@@ -62,11 +62,11 @@ const ProductCard = ({
     setHeartActive((prev) => !prev);
   };
 
-  let discountAmt = 5;
+  let discountAmt = product?.subProducts[active]?.discount;
 
   const productName =
     product?.name.length > 45
-      ? `${product?.name.substring(0, 42)}...`
+      ? `${product?.name.substring(0, 54)}...`
       : product?.name;
 
   const productPrice = prices
@@ -78,7 +78,7 @@ const ProductCard = ({
   return (
     <div
       className={cn(
-        "w-full shadow-sm rounded-md border border-border/40",
+        "w-full shadow-sm rounded-md border border-border",
         !w_full && "sm:w-1/2 md:w-1/3 lg:w-1/4"
       )}
     >
@@ -98,7 +98,7 @@ const ProductCard = ({
           >
             <AiOutlineHeart
               size={28}
-              className={`fill-gray-400 absolute inset-0 `}
+              className="fill-stone-200 absolute inset-0"
             />
             <AiFillHeart
               size={28}
@@ -107,7 +107,7 @@ const ProductCard = ({
           </div>
           {/* --------------- SAVEUPTO --------------- */}
           {discountAmt > 0 && (
-            <div className="text-red-700 font-semibold text-base text-left bg-[#cdb9fa] py-[6px] px-4 w-full absolute bottom-0 z-10">
+            <div className="text-accent-foreground font-semibold text-base text-left bg-accent/80 backdrop-blur-sm py-[6px] px-4 w-full absolute bottom-0 z-10">
               <span>Discount upto Rs. {discountAmt}</span>
             </div>
           )}
@@ -123,8 +123,48 @@ const ProductCard = ({
             </Link>
             <div className="mb-5">
               <span className="text-lg">{productPrice}</span>
-              {/* <s className="text-sm text-gray-color">Rs 423</s> */}
             </div>
+
+            {/* STYLE SELECT OPTION */}
+            <div className="flex gap-2 mb-4">
+              {styles &&
+                styles.map((style, i) =>
+                  style.image ? (
+                    <Image
+                      key={i}
+                      src={style.image}
+                      alt=""
+                      width={30}
+                      height={30}
+                      className={`
+                      rounded-full w-[30px] h-[30px] cursor-pointer
+                      object-cover shadow-md 
+                      outline-offset-2 outline hover:outline-primary-color
+                      transition-all duration-500
+                      ${i == active && "outline-primary-color"} 
+                    `}
+                      onMouseOver={() => {
+                        setImages(product.subProducts[i].images);
+                        setActive(i);
+                      }}
+                    />
+                  ) : (
+                    <span
+                      key={i}
+                      className={`
+                    bg-white 
+                    w-[30px] h-[30px] rounded-full
+                    shadow-md overflow-hidden
+                  `}
+                      onMouseOver={() => {
+                        setImages(product.subProducts[i].images);
+                        setActive(i);
+                      }}
+                    ></span>
+                  )
+                )}
+            </div>
+
             <Button
               full
               icon

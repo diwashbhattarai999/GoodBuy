@@ -75,7 +75,7 @@ const UserProfile = () => {
   return (
     <div ref={userProfileRef} className="relative">
       <Image
-        src={user?.image || "/images/default-profile.png"}
+        src={user?.image || "/images/default-profile.webp"}
         alt="profile"
         width={100}
         height={100}
@@ -85,7 +85,7 @@ const UserProfile = () => {
 
       <div
         className={cn(
-          "absolute right-0 z-30 px-2 py-3 rounded-md shadow-sm w-52 top-12 bg-primary text-primary-foreground duration-300",
+          "absolute right-0 z-30 px-2 py-3 rounded-md shadow-md w-52 top-12 bg-background border border-primary text-primary-foreground duration-300",
           isProfileOpen
             ? "translate-y-0 opacity-100 pointer-events-auto"
             : "-translate-y-5 opacity-0 pointer-events-none"
@@ -101,7 +101,7 @@ const UserProfile = () => {
           {user?.role === UserRole.VENDOR && (
             <li
               onClick={() => router.push("/vendor/dashboard")}
-              className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer hover:bg-popover"
+              className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer border border-transparent hover:border-border hover:bg-muted"
             >
               <LuLayoutDashboard className="w-auto py-3 h-11" />
               <h3>Vendor Dashboard</h3>
@@ -115,7 +115,7 @@ const UserProfile = () => {
               <li
                 key={index}
                 onClick={item.onClick}
-                className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer hover:bg-popover"
+                className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer border border-transparent hover:border-border hover:bg-muted"
               >
                 <item.icon className="w-auto py-3 h-11" />
                 <h3>{item.label}</h3>
@@ -125,7 +125,7 @@ const UserProfile = () => {
 
           <li
             onClick={handleLogout}
-            className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer hover:bg-popover"
+            className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer border border-transparent hover:border-border hover:bg-muted "
           >
             <LuLogOut className="w-auto py-3 h-11" />
             <h3>Logout</h3>

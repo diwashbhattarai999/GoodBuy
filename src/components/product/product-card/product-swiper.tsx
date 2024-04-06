@@ -53,9 +53,11 @@ const ProductSwiper = ({ images, imgHeight }: ProductSwiperProps) => {
             <Image
               src={img.url}
               alt="Product"
-              width="200"
-              height="200"
-              className="h-[250px] w-full object-contain"
+              fill
+              className="object-contain  rounded-md"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              loading="eager"
+              aria-hidden="true"
             />
           </SwiperSlide>
         ))}

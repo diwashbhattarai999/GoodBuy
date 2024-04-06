@@ -33,6 +33,7 @@ model User {
   ShippingAdress          ShippingAdress[]
   createdAt               DateTime               @default(now())
   updatedAt               DateTime               @updatedAt
+  Order                   Order?
 }
 
 model Account {
@@ -112,6 +113,7 @@ model Product {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Order     Order[]
 }
 
 model SubProduct {
@@ -246,6 +248,43 @@ model ShippingAdress {
   city      String
   address   String
   street    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Order     Order[]
+}
+
+enum PaymentMethod {
+  CASHONDELIVERY
+  KHALTI
+}
+
+enum Status {
+  INITIATED
+  PENDING
+  COMPLETED
+  REFUNDED
+  EXPIRED
+  CANCELED
+}
+
+model Order {
+  id                  String         @id @default(auto()) @map("_id") @db.ObjectId
+  user                User?          @relation(fields: [userId], references: [id])
+  userId              String?        @unique @db.ObjectId
+  product             Product        @relation(fields: [productId], references: [id])
+  productId           String         @db.ObjectId
+  shippingAddress     ShippingAdress @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId   String         @db.ObjectId
+  paymentMethod       PaymentMethod
+  status              Status
+  total               String
+  totalBeforeDiscount String
+  coupenApplied       String
+  shippingPrice       String
+  taxPrice            String
+  paidAt              DateTime
+  deliveredAt         DateTime
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

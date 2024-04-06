@@ -60,7 +60,7 @@ const AddProductImage = ({
       <div className="w-full">
         {images.length <= 0 ? (
           <Image
-            src="/images/no-image.png"
+            src="/images/no-image.webp"
             alt="no-image"
             width={800}
             height={800}

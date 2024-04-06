@@ -246,7 +246,7 @@ const Sidebar = () => {
       <div className="md:w-full group relative">
         <div className="w-full flex items-center gap-2 ">
           <Image
-            src={user?.image || "/images/default-profile.png"}
+            src={user?.image || "/images/default-profile.webp"}
             alt="profile"
             width={100}
             height={100}

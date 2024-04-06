@@ -11,16 +11,16 @@ interface IHeroSectionProps {
 
 const BANNER_IMAGES = [
   {
-    url: "/images/banner1.jpg",
+    url: "/images/banner1.webp",
   },
   {
-    url: "/images/banner2.jpg",
+    url: "/images/banner2.webp",
   },
   {
-    url: "/images/banner3.jpg",
+    url: "/images/banner3.webp",
   },
   {
-    url: "/images/banner4.jpg",
+    url: "/images/banner4.webp",
   },
 ];
 
@@ -54,10 +54,13 @@ const HeroSection = ({ categories }: IHeroSectionProps) => {
               key={index}
               src={img.url}
               alt="Hero-banner"
-              width={1000}
-              height={1000}
+              width={800}
+              height={800}
               priority
               className="w-full h-[19rem] object-cover mb-8"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              loading="eager"
+              aria-hidden="true"
             />
           ))}
         </HeroSwiper>

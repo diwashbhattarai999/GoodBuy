@@ -41,7 +41,7 @@ const ChangeProfileImg = ({
       <div className="mb-4 text-left flex items-center justify-between w-full gap-4">
         <div className="h-36 w-36 p-1 rounded-full cursor-pointer duration-300 relative">
           <Image
-            src={imageUrl || value || "/images/default-profile.png"}
+            src={imageUrl || value || "/images/default-profile.webp"}
             alt="Profile"
             width={500}
             height={500}

@@ -49,10 +49,12 @@ const Home = ({ categories, products }: HomeProps) => {
       <Image
         src="/images/banner.png"
         alt="Hero-banner"
-        width={1000}
-        height={1000}
-        priority
+        width={800}
+        height={800}
         className="w-full h-full mb-8"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        loading="eager"
+        aria-hidden="true"
       />
 
       {/* EXPLORE OUR PRODUCT */}

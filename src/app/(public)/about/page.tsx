@@ -52,32 +52,32 @@ const ABOUT_SERVICES = [
 
 const ABOUT_TEAMS = [
   {
-    image: "/images/team1.jpg",
+    image: "/images/team1.webp",
     name: "Alice Johnson",
     position: " Senior Software Engineer",
   },
   {
-    image: "/images/team2.jpg",
+    image: "/images/team2.webp",
     name: "David Smith",
     position: "Data Scientist",
   },
   {
-    image: "/images/team3.jpg",
+    image: "/images/team3.webp",
     name: "Sarah Patel",
     position: "Product Manager",
   },
   {
-    image: "/images/team1.jpg",
+    image: "/images/team1.webp",
     name: "Alice Johnson",
     position: " Senior Software Engineer",
   },
   {
-    image: "/images/team2.jpg",
+    image: "/images/team2.webp",
     name: "David Smith",
     position: "Data Scientist",
   },
   {
-    image: "/images/team3.jpg",
+    image: "/images/team3.webp",
     name: "Sarah Patel",
     position: "Product Manager",
   },
@@ -86,9 +86,9 @@ const ABOUT_TEAMS = [
 const AboutPage = () => {
   return (
     <AnimationWrapper>
-      <MaxWidthContainer className="mt-5">
+      <MaxWidthContainer className="mt-5" aria-label="About Page">
         {/* Hero section */}
-        <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="relative flex max-md:flex-col md:flex-row items-center justify-between gap-8">
           <div className="w-full md:w-[55%]">
             <h1 className="mb-8 text-4xl lg:text-5xl font-bold text-foreground">
               Welcome to Good Buy
@@ -109,18 +109,22 @@ const AboutPage = () => {
             </p>
           </div>
 
-          <div className="w-full md:w-[45%] md:max-w-[36rem] h-[32rem]">
+          <div className="w-full md:w-[45%] md:max-w-[36rem] h-[32rem] relative flex items-center justify-center">
             <Image
               src="/images/about.jpg"
               alt="About"
-              className="h-full w-full object-contain"
               width={500}
               height={500}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              loading="eager"
+              className="object-contain"
+              priority
+              aria-hidden="true"
             />
           </div>
         </div>
-        {/* Info */}
 
+        {/* Info */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 lg:gap-24 my-16 text-center">
           {ABOUT_INFOS.map((info, index) => (
             <div
@@ -129,6 +133,7 @@ const AboutPage = () => {
                 "border border-border flex flex-col gap-3 p-4 items-center justify-center rounded-md group hover:bg-accent/80 shadow-sm hover:shadow-md cursor-pointer duration-300",
                 index === 1 && "bg-accent/80 shadow-md"
               )}
+              aria-label={info.desc}
             >
               <div
                 className={cn(
@@ -159,7 +164,7 @@ const AboutPage = () => {
           ))}
         </div>
         {/* Teams */}
-        <div className="my-24">
+        <div className="my-24" aria-label="Our Teams">
           <h2 className="text-primary-foreground font-bold text-3xl mb-8">
             Our <span className="text-accent">Teams</span>
           </h2>
@@ -168,14 +173,20 @@ const AboutPage = () => {
               <div
                 key={index}
                 className="border border-border flex flex-col gap-3 rounded-md shadow-sm py-6 mb-12"
+                role="group"
+                aria-label={`${team.name}, ${team.position}`}
               >
-                <Image
-                  src={team.image}
-                  alt={team.name}
-                  className="min-w-full h-[32rem] object-cover object-top mx-auto"
-                  width={500}
-                  height={500}
-                />
+                <div className="h-80 relative">
+                  <Image
+                    src={team.image}
+                    alt={team.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-contain"
+                    loading="eager"
+                    priority
+                  />
+                </div>
                 <div className="h-fit">
                   <h2 className="text-2xl font-semibold text-foreground">
                     {team.name}
@@ -195,6 +206,7 @@ const AboutPage = () => {
             <div
               key={index}
               className="flex flex-col gap-3 p-4 items-center justify-center rounded-md"
+              aria-label={info.title}
             >
               <div className="ring-secondary-foreground/60 ring-8 bg-foreground text-primary rounded-full flex items-center justify-center p-2 mt-2">
                 <info.icon className="rounded-full size-7 p-1" />

@@ -83,7 +83,7 @@ const Cart = () => {
       {cartItems.length <= 0 ? (
         <div className="w-full flex flex-col items-center justify-center gap-6">
           <Image
-            src="/images/no-cart.jpg"
+            src="/images/no-cart.webp"
             alt="no-cart"
             width={400}
             height={400}
