@@ -37,7 +37,7 @@ export const useCart = () => {
 };
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cartItems, setCartItems] = useState<ICartItem>([]);
+  const [cartItems, setCartItems] = useState<ICartItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   const user = useCurrentUser();
