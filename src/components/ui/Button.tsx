@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { ScaleLoader } from "react-spinners";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -7,6 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: boolean;
   full?: boolean;
   disabled?: boolean;
+  loader?: boolean;
   className?: string;
 }
 
@@ -18,6 +20,7 @@ const Button = ({
   full,
   disabled,
   className,
+  loader,
   ...props
 }: ButtonProps) => {
   return (
@@ -30,11 +33,13 @@ const Button = ({
         icon &&
           "bg-transparent text-foreground hover:bg-muted flex items-center justify-center gap-4 w-full py-[10px]",
         full ? "w-full" : "w-fit",
+        loader && "flex items-center justify-center gap-2",
         className
       )}
       {...props}
       disabled={disabled}
     >
+      {loader && <ScaleLoader color="#178731" width={15} height={15} />}
       {children}
     </button>
   );

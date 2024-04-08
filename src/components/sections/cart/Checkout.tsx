@@ -152,7 +152,7 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
       }
 
       if (values.paymentMethod === "cashOnDelivery") {
-        router.push(`checkout/success?paymentMethod=cashOnDelivery`);
+        router.replace(`checkout/success?paymentMethod=cashOnDelivery`);
       }
     });
   };
@@ -391,7 +391,12 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
               {error && <FormError message={error} />}
 
               {/* Submit Button */}
-              <Button disabled={isPending} full className="mt-4">
+              <Button
+                disabled={isPending}
+                loader={isPending}
+                full
+                className="mt-4"
+              >
                 Place Order
               </Button>
             </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
+import NextTopLoader from "nextjs-toploader";
 
 import { auth } from "@/auth";
 
@@ -39,6 +40,8 @@ export default async function RootLayout({
               "antialiased flex flex-col min-h-screen bg-background text-foreground"
             )}
           >
+            <NextTopLoader color="#178731" showSpinner={false} />
+
             {children}
             <Toaster position="top-center" />
           </body>

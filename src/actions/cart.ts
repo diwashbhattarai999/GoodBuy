@@ -16,6 +16,7 @@ import {
   SubProduct,
   User,
 } from "@prisma/client";
+import { ICartItem } from "../../product";
 
 // Add CartItem function
 export const addCartItem = async (subProductId: string) => {
@@ -50,7 +51,6 @@ export const addCartItem = async (subProductId: string) => {
                 subCategories: true,
                 details: true,
                 questions: true,
-                Order: true,
                 reviews: true,
               },
             },
@@ -79,7 +79,6 @@ export const addCartItem = async (subProductId: string) => {
                 subCategories: true,
                 details: true,
                 questions: true,
-                Order: true,
                 reviews: true,
               },
             },
@@ -127,7 +126,6 @@ export const deleteCartItem = async (id: string) => {
                 subCategories: true,
                 details: true,
                 questions: true,
-                Order: true,
                 reviews: true,
               },
             },
@@ -180,7 +178,6 @@ export const getAllCartItems = async () => {
                 subCategories: true,
                 details: true,
                 questions: true,
-                Order: true,
                 reviews: true,
               },
             },
