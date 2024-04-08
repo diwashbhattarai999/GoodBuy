@@ -21,6 +21,8 @@ import { useRouter } from "next/navigation";
 import useOnClickOutside from "@/hooks/use-on-click-outside";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@prisma/client";
+import { IconType } from "react-icons";
+import Link from "next/link";
 
 const UserProfile = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -36,7 +38,12 @@ const UserProfile = () => {
 
   const user = useCurrentUser();
 
-  const MENU_ITEMS = [
+  const MENU_ITEMS: {
+    label: string;
+    icon: IconType;
+    onClick?: () => void;
+    link?: string;
+  }[] = [
     {
       label: "Manage Profile",
       icon: LuUserCircle2,
@@ -48,23 +55,17 @@ const UserProfile = () => {
     {
       label: "My Orders",
       icon: LuShoppingBag,
-      onClick: () => {
-        router.push("/my-orders");
-      },
+      link: "/my-orders",
     },
     {
       label: "My Cancellations",
       icon: LuXCircle,
-      onClick: () => {
-        router.push("/my-cancellations");
-      },
+      link: "/my-cancellations",
     },
     {
       label: "My Reviews",
       icon: LuStar,
-      onClick: () => {
-        router.push("/my-reviews");
-      },
+      link: "/my-reviews",
     },
   ];
 
@@ -99,13 +100,12 @@ const UserProfile = () => {
           </li>
 
           {user?.role === UserRole.VENDOR && (
-            <li
-              onClick={() => router.push("/vendor/dashboard")}
-              className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer border border-transparent hover:border-border hover:bg-muted"
-            >
-              <LuLayoutDashboard className="w-auto py-3 h-11" />
-              <h3>Vendor Dashboard</h3>
-            </li>
+            <Link href="/vendor/dashboard">
+              <li className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer border border-transparent hover:border-border hover:bg-muted">
+                <LuLayoutDashboard className="w-auto py-3 h-11" />
+                <h3>Vendor Dashboard</h3>
+              </li>
+            </Link>
           )}
 
           <hr className="bg-border" />
@@ -117,8 +117,19 @@ const UserProfile = () => {
                 onClick={item.onClick}
                 className="flex items-center gap-3 px-2 font-medium transition-colors rounded-md cursor-pointer border border-transparent hover:border-border hover:bg-muted"
               >
-                <item.icon className="w-auto py-3 h-11" />
-                <h3>{item.label}</h3>
+                {item.link ? (
+                  <Link href={item.link}>
+                    <div className="flex items-center gap-3">
+                      <item.icon className="w-auto py-3 h-11" />
+                      <h3>{item.label}</h3>
+                    </div>
+                  </Link>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <item.icon className="w-auto py-3 h-11" />
+                    <h3>{item.label}</h3>
+                  </div>
+                )}
               </li>
             );
           })}

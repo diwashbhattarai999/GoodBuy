@@ -278,6 +278,7 @@ model Order {
   paymentMethod     PaymentMethod
   status            Status
   total             Int
+  quantity          Int
   shippingPrice     Int?
   taxPrice          Int?
   transactionId     String?

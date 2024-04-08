@@ -1,9 +1,17 @@
 import MaxWidthContainer from "@/components/max-width-container";
+import OrderTable from "@/components/sections/my-orders/order-table";
 
-const MyOrdersPage = () => {
+import { getOrdersByUserId } from "@/data/user/order";
+import { currentUser } from "@/lib/auth";
+
+const MyOrdersPage = async () => {
+  const user = await currentUser();
+
+  const orders = await getOrdersByUserId(user?.id as string);
+
   return (
     <MaxWidthContainer>
-      <div>MyOrders</div>
+      <OrderTable orders={orders} />
     </MaxWidthContainer>
   );
 };

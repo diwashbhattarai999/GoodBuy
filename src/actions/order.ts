@@ -1,12 +1,16 @@
 "use server";
 
-import * as z from "zod";
-import { getUserById } from "@/data/user";
-import { currentUser } from "@/lib/auth";
-import { ICartItem } from "../../product";
+import { revalidatePath } from "next/cache";
+
+import { PaymentMethod, Status } from "@prisma/client";
+
+import { ICartItem } from "@/../product";
+
 import { db } from "@/lib/db";
+import { currentUser } from "@/lib/auth";
+
+import { getUserById } from "@/data/user";
 import { getShippingAddressByUserId } from "@/data/user/shippingAddress";
-import { Order, PaymentMethod, Status } from "@prisma/client";
 
 interface IOrder {
   orderItems: ICartItem[];
@@ -71,13 +75,6 @@ export const order = async ({
 
   if (!shippingAddress) return { error: "No shipping address found" };
 
-  // Check for existing orders
-  const existingOrders = await db.order.findMany({
-    where: {
-      userId: user.id,
-    },
-  });
-
   const OrdersData = Array.from(orderItems).map((orderItem) => ({
     userId: user.id,
     subProductId: orderItem.subProductId,
@@ -87,6 +84,7 @@ export const order = async ({
       ? mapStatus(paymentData?.status as string)
       : "Pending",
     total,
+    quantity: orderItem.quantity,
     shippingPrice: orderItems.reduce(
       (acc, curr) => acc + (curr.subProduct.product.shipping || 0),
       0
@@ -101,6 +99,8 @@ export const order = async ({
       await db.order.create({ data: orderItem });
     })
   );
+
+  revalidatePath("/my-orders");
 
   return newOrders;
 };
