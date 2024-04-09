@@ -9,6 +9,7 @@ import {
   getSubcategoryById,
   getSubcategoryByName,
 } from "@/data/vendor/subCategory";
+import { revalidatePath } from "next/cache";
 
 export const subcategories = async (
   id: string,
@@ -50,6 +51,8 @@ export const subcategories = async (
     },
   });
 
+  revalidatePath("/vendor/sub-categories");
+
   return { success: "New Category Created!" };
 };
 
@@ -62,6 +65,8 @@ export const deleteSubCategory = async (id: string) => {
     await db.subCategory.delete({
       where: { id },
     });
+
+    revalidatePath("/vendor/sub-categories");
 
     return { success: "Category Deleted!" };
   }

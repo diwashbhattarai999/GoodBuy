@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart.context";
 import Loader from "@/components/loader";
 import { ScaleLoader } from "react-spinners";
+import { BsFillCartPlusFill } from "react-icons/bs";
 
 interface NewProductCardProps {
   product: CustomProduct;
@@ -166,7 +167,7 @@ const ProductCard = ({ product, Icon, imgHeight }: NewProductCardProps) => {
                 <ScaleLoader color="#ffffff" width={15} height={15} />
               ) : (
                 <>
-                  {Icon && <Icon />}
+                  {Icon ? <Icon /> : <BsFillCartPlusFill />}
                   Add To Cart
                 </>
               )}

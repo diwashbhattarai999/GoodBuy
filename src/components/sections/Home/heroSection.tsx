@@ -14,15 +14,6 @@ const BANNER_IMAGES = [
     url: "/images/banner-1.webp",
   },
   {
-    url: "/images/banner-2.webp",
-  },
-  {
-    url: "/images/banner-3.webp",
-  },
-  {
-    url: "/images/banner-4.webp",
-  },
-  {
     url: "/images/banner1.webp",
   },
   {

@@ -94,6 +94,7 @@ export const khaltiPay = async (payload: IPayload) => {
       },
     };
   } catch (err: any) {
+    console.log(err.data);
     return { error: err.data?.detail };
   }
 };

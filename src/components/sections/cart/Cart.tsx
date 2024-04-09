@@ -19,10 +19,17 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import Loader from "../../loader";
+import { ScaleLoader } from "react-spinners";
 
 const Cart = () => {
-  const { cartItems, addToCart, removeFromCart, clearCart, loading } =
-    useCart();
+  const {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    clearCart,
+    loading,
+    loadingItems,
+  } = useCart();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -122,11 +129,10 @@ const Cart = () => {
             </TableHeader>
             <TableBody>
               {cartItems.map((item) => (
-                <TableRow
-                  key={item.id}
-                  onClick={() => handleCheckboxChange(item.subProductId)}
-                >
-                  <TableCell>
+                <TableRow key={item.id}>
+                  <TableCell
+                    onClick={() => handleCheckboxChange(item.subProductId)}
+                  >
                     <input
                       type="checkbox"
                       checked={selectedItems.includes(item.subProductId)}
@@ -159,25 +165,31 @@ const Cart = () => {
                   <TableCell>Rs. {item.subProduct.sizes[0].price}</TableCell>
 
                   <TableCell>
-                    <div className="flex gap-1">
-                      <Button
-                        onClick={() => addToCart(item.subProductId)}
-                        icon
-                        className="border border-border rounded-md px-2 py-1 hover:text-muted-foreground"
-                      >
-                        <TbPlus />
-                      </Button>
-                      <span className="my-[2px] px-4 py-1">
-                        {item.quantity}
-                      </span>
-                      <Button
-                        onClick={() => removeFromCart(item.id)}
-                        icon
-                        className="border border-border rounded-md px-2 py-1 hover:text-muted-foreground"
-                      >
-                        <TbMinus />
-                      </Button>
-                    </div>
+                    {loadingItems.includes(item.subProductId) ? (
+                      <ScaleLoader color="#21221f" width={15} height={15} />
+                    ) : (
+                      <>
+                        <div className="flex gap-1">
+                          <Button
+                            onClick={() => addToCart(item.subProductId)}
+                            icon
+                            className="border border-border rounded-md px-2 py-1 hover:text-muted-foreground"
+                          >
+                            <TbPlus />
+                          </Button>
+                          <span className="my-[2px] px-4 py-1">
+                            {item.quantity}
+                          </span>
+                          <Button
+                            onClick={() => removeFromCart(item.id)}
+                            icon
+                            className="border border-border rounded-md px-2 py-1 hover:text-muted-foreground"
+                          >
+                            <TbMinus />
+                          </Button>
+                        </div>
+                      </>
+                    )}
                   </TableCell>
 
                   <TableCell>

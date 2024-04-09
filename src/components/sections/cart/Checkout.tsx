@@ -79,10 +79,11 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
     setError("");
     setSuccess("");
 
+    // TODO: Remove math.min in production when using actual khalti not testing sandbox khalti
     const payload = {
       return_url: `${process.env.NEXT_PUBLIC_KHALTI_RETURN_URL}`,
       website_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
-      amount: parseInt(total),
+      amount: Math.min(parseInt(total), 100000),
       purchase_order_id: uuidv4(),
       purchase_order_name: "test",
       customer_info: {
@@ -93,24 +94,30 @@ const Checkout = ({ shippingAddress }: ICheckoutProps) => {
       amount_breakdown: [
         {
           label: "Mark Price",
-          amount: parseInt(subtotal),
+          amount: Math.min(parseInt(subtotal), 100000),
         },
         {
           label: "Shipping Price",
-          amount: parseInt(shipping),
+          amount: Math.min(parseInt(shipping), 100000),
         },
       ],
       product_details: checkoutItems.map((checkoutItem) => {
         return {
           identity: checkoutItem.id,
           name: checkoutItem.subProduct.product.name,
-          total_price: Math.floor(
-            (checkoutItem.subProduct.sizes[0].price +
-              checkoutItem.subProduct.product.shipping) *
-              checkoutItem.quantity
+          total_price: Math.min(
+            Math.floor(
+              (checkoutItem.subProduct.sizes[0].price +
+                checkoutItem.subProduct.product.shipping) *
+                checkoutItem.quantity
+            ),
+            100000
           ),
           quantity: checkoutItem.quantity,
-          unit_price: Math.floor(checkoutItem.subProduct.sizes[0].price),
+          unit_price: Math.min(
+            Math.floor(checkoutItem.subProduct.sizes[0].price),
+            100000
+          ),
         };
       }),
       merchant_username: "Diwash Bhattarai",

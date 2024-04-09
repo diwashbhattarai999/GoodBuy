@@ -40,7 +40,7 @@ export default async function RootLayout({
               "antialiased flex flex-col min-h-screen bg-background text-foreground"
             )}
           >
-            <NextTopLoader color="#282f2b" showSpinner={false} />
+            <NextTopLoader color="#178731" showSpinner={false} />
 
             {children}
             <Toaster position="top-center" />

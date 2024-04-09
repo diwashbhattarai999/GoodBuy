@@ -1,6 +1,4 @@
-import { Image, Size, Style, SubProduct } from "@prisma/client";
-
-import { db } from "@/lib/db";
+import { Image, Size, Style } from "@prisma/client";
 
 import {
   GetProductBySlugSubProductType,
@@ -16,6 +14,10 @@ import BreadCrumbs from "@/components/product/bread-crumbs";
 import MainSwiper from "@/components/product/main-swiper";
 import ProductInfos from "@/components/product/product-info";
 import Loader from "@/components/loader";
+import SectionHeader from "@/components/sections/Home/section-header";
+import { getProducts } from "@/data/vendor/products";
+import ProductCard from "@/components/product/product-card/product-card";
+import Services from "@/components/sections/Services";
 
 export interface CustomProductType extends CustomProduct {
   images: Image[];
@@ -136,6 +138,8 @@ export default async function ProductPage({
     return <Loader />;
   }
 
+  const products = await getProducts();
+
   return (
     <AnimationWrapper>
       <MaxWidthContainer>
@@ -147,10 +151,32 @@ export default async function ProductPage({
         />
         <div className="bg-white p-2 mb-2 relative">
           <div className="flex max-md:flex-col gap-6">
-            <MainSwiper images={newProduct.images} />
+            <MainSwiper
+              images={newProduct.images}
+              subProducts={newProduct.subProducts}
+            />
             <ProductInfos product={newProduct} />
           </div>
         </div>
+
+        <div className="my-16">
+          <SectionHeader
+            label="Find More"
+            subLabel="Similar Products"
+            showArrows
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 -mx-[10px] my-6 gap-6">
+            {products?.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                imgHeight="h-[280px]"
+              />
+            ))}
+          </div>
+        </div>
+
+        <Services />
       </MaxWidthContainer>
     </AnimationWrapper>
   );

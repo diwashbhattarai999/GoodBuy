@@ -115,8 +115,13 @@
     background-color: #eeeeee;
   }
 
+  .inner-image figure,
   .inner-image div,
   .inner-image img {
-    @apply w-full h-full object-contain;
+    @apply h-full;
+  }
+
+  .inner-image img {
+    @apply object-contain;
   }
 }
