@@ -22,6 +22,7 @@ import UserProfile from "@/components/user-profile/user-profile";
 import NavBanner from "@/components/sections//Banner";
 import { useCart } from "@/context/cart.context";
 import Button from "../ui/Button";
+import { ScaleLoader } from "react-spinners";
 
 interface NavbarProps {
   showNavBanner?: boolean;
@@ -35,7 +36,7 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
 
   const pathname = usePathname().split("/")[1];
 
-  const { cartItems } = useCart();
+  const { loading, cartItems } = useCart();
 
   const handleMenu = () => {
     setIsMenuOpen((currentValue) => !currentValue);
@@ -70,14 +71,14 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
             href="/"
             className="text-3xl font-bold tracking-tight text-primary-foreground max-md:hidden"
           >
-            Good <span className="text-accent">Buy</span>
+            Good <span className="text-emerald-950">Buy</span>
           </Link>
 
           <Link
             href="/"
             className="text-3xl font-bold tracking-tight text-primary-foreground md:hidden"
           >
-            G<span className="text-accent">B</span>
+            G<span className="text-emerald-950">B</span>
           </Link>
 
           <div className="hidden md:flex gap-16 text-sm font-medium lg:gap-24">
@@ -192,58 +193,64 @@ const Navbar = ({ showNavBanner }: NavbarProps) => {
                       )}
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-4">
-                      <h1 className="font-semibold text-lg underline">
-                        Cart Items
-                      </h1>
-                      {cartItems.slice(0, 2).map((item) => {
-                        return (
-                          <div
-                            key={item.id}
-                            className="bg-muted rounded-md px-2 py-4 border border-border"
-                          >
-                            <div className="flex items-center justify-between gap-4">
-                              <Image
-                                src={item.subProduct.images[0].url}
-                                alt={item.subProduct.product.name}
-                                width={40}
-                                height={40}
-                              />
-                              <div className="flex-1">
-                                <p className="text-lg text-muted-foreground">
-                                  {item.subProduct.product.name}
-                                </p>
+                    <>
+                      {loading && (
+                        <ScaleLoader color="#ffffff" width={15} height={15} />
+                      )}
+                      <div className="flex flex-col gap-4">
+                        <h1 className="font-semibold text-lg underline">
+                          Cart Items
+                        </h1>
+                        {cartItems.slice(0, 2).map((item) => {
+                          return (
+                            <div
+                              key={item.id}
+                              className="bg-muted rounded-md px-2 py-4 border border-border"
+                            >
+                              <div className="flex items-center justify-between gap-4">
+                                <Image
+                                  src={item.subProduct.images[0].url}
+                                  alt={item.subProduct.product.name}
+                                  width={40}
+                                  height={40}
+                                />
+                                <div className="flex-1">
+                                  <p className="text-lg text-muted-foreground">
+                                    {item.subProduct.product.name}
+                                  </p>
+                                  <p className="text-lg  text-muted-foreground">
+                                    Rs. {item.subProduct.sizes[0].price}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center justify-between">
                                 <p className="text-lg  text-muted-foreground">
-                                  Rs. {item.subProduct.sizes[0].price}
+                                  x {item.quantity}
+                                </p>
+                                <p className="text-lg font-medium text-muted-foreground">
+                                  Total: Rs.
+                                  {item.subProduct.sizes[0].price *
+                                    item.quantity}
                                 </p>
                               </div>
                             </div>
-                            <div className="flex items-center justify-between">
-                              <p className="text-lg  text-muted-foreground">
-                                x {item.quantity}
-                              </p>
-                              <p className="text-lg font-medium text-muted-foreground">
-                                Total: Rs.
-                                {item.subProduct.sizes[0].price * item.quantity}
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
 
-                      <Link href="/cart" className="underline text-right">
-                        See all
-                      </Link>
+                        <Link href="/cart" className="underline text-right">
+                          See all
+                        </Link>
 
-                      <div className="flex justify-between items-center text-muted-foreground">
-                        <span className="font-semibold text-lg">
-                          Total Price:
-                        </span>
-                        <span className="font-medium text-base pr-[6px]">
-                          Rs. {totalCartPrice}
-                        </span>
+                        <div className="flex justify-between items-center text-muted-foreground">
+                          <span className="font-semibold text-lg">
+                            Total Price:
+                          </span>
+                          <span className="font-medium text-base pr-[6px]">
+                            Rs. {totalCartPrice}
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    </>
                   )}
                 </div>
               </li>

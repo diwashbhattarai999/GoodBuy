@@ -11,6 +11,18 @@ interface IHeroSectionProps {
 
 const BANNER_IMAGES = [
   {
+    url: "/images/banner-1.webp",
+  },
+  {
+    url: "/images/banner-2.webp",
+  },
+  {
+    url: "/images/banner-3.webp",
+  },
+  {
+    url: "/images/banner-4.webp",
+  },
+  {
     url: "/images/banner1.webp",
   },
   {
@@ -28,8 +40,8 @@ const HeroSection = ({ categories }: IHeroSectionProps) => {
   return (
     <>
       {/* Categories Section */}
-      <div className="flex items-start justify-between gap-6 lg:h-[18rem]">
-        <ul className="max-lg:hidden lg:flex flex-col justify-between h-full mt-2">
+      <div className="flex items-start justify-between gap-8 h-[19rem]">
+        <ul className="max-lg:hidden lg:flex flex-col items-center justify-between h-full lg:w-[20%]">
           {categories?.map((category, index) => {
             return (
               <li
@@ -46,19 +58,17 @@ const HeroSection = ({ categories }: IHeroSectionProps) => {
           })}
         </ul>
 
-        <div className="max-lg:hidden h-full w-[1px] bg-border mt-2" />
+        <div className="max-lg:hidden h-full w-[1px] bg-border mr-8" />
 
-        <HeroSwiper className="lg:w-[80%] w-full">
+        <HeroSwiper className="lg:mr-0 w-full">
           {BANNER_IMAGES.map((img, index) => (
             <Image
               key={index}
               src={img.url}
               alt="Hero-banner"
-              width={800}
-              height={800}
+              fill
               priority
-              className="w-full h-[19rem] object-cover mb-8"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 60vw"
               loading="eager"
               aria-hidden="true"
             />

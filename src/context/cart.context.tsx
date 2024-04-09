@@ -18,6 +18,7 @@ interface CartContextType {
   removeFromCart: (cartItemId: string) => void;
   clearCart: (cartItemId: string) => void;
   loading: boolean;
+  loadingItems: string[];
 }
 
 const CartContext = createContext<CartContextType>({
@@ -26,6 +27,7 @@ const CartContext = createContext<CartContextType>({
   removeFromCart: () => {},
   clearCart: () => {},
   loading: false,
+  loadingItems: [],
 });
 
 export const useCart = () => {
@@ -39,6 +41,7 @@ export const useCart = () => {
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<ICartItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingItems, setLoadingItems] = useState<string[]>([]);
 
   const user = useCurrentUser();
 
@@ -60,21 +63,21 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addToCart = async (subProductId: string) => {
     try {
-      setLoading(true);
+      setLoadingItems((prev) => [...prev, subProductId]);
+
       const data = await addCartItem(subProductId);
       if (data.success) {
         toast.success(data.success);
 
         const updatedCartItems = await getAllCartItems();
         setCartItems(updatedCartItems || []);
-        setLoading(false);
       } else if (data.error) {
         toast.error(data.error);
-        setLoading(false);
       }
     } catch (error) {
       console.log(error);
-      setLoading(false);
+    } finally {
+      setLoadingItems((prev) => prev.filter((id) => id !== subProductId)); // Reset loading state after adding the item
     }
   };
 
@@ -120,7 +123,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, clearCart, loading }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        loading,
+        loadingItems,
+      }}
     >
       {children}
     </CartContext.Provider>

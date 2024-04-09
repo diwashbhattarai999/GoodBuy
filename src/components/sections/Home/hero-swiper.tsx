@@ -44,7 +44,7 @@ const HeroSwiper = ({ children, className }: HeroSwiperProps) => {
     <Swiper
       ref={swiperRef}
       modules={[Pagination, Autoplay, Keyboard]}
-      spaceBetween={50}
+      spaceBetween={5}
       slidesPerView={1}
       loop={true}
       pagination={{ clickable: true, dynamicBullets: true }}

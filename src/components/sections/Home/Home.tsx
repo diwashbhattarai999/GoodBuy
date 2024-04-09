@@ -41,24 +41,24 @@ const Home = ({ categories, products }: HomeProps) => {
     <>
       <HeroSection categories={categories} />
       <Todays products={products} />
-      <Categories />
+      <Categories categories={categories} />
 
       {/* BEST SELLING PRODUCT */}
 
       {/* BUY NOW BANNER WITH TIMER */}
-      <Image
-        src="/images/banner.png"
-        alt="Hero-banner"
-        width={800}
-        height={800}
-        className="w-full h-full mb-8"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        loading="eager"
-        aria-hidden="true"
-      />
-
+      <div className="h-[32rem] w-full relative">
+        <Image
+          src="/images/banner.png"
+          alt="Hero-banner"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw"
+          className="bg-cover"
+          loading="eager"
+          aria-hidden="true"
+        />
+      </div>
       {/* EXPLORE OUR PRODUCT */}
-      <OurProducts />
+      <OurProducts products={products} />
 
       {/* NEW ARRIVAL */}
       <Featured />

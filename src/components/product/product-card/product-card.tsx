@@ -11,20 +11,16 @@ import ProductSwiper from "./product-swiper";
 import { CustomProduct } from "@/../product";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart.context";
+import Loader from "@/components/loader";
+import { ScaleLoader } from "react-spinners";
 
 interface NewProductCardProps {
   product: CustomProduct;
-  w_full?: boolean;
   Icon?: IconType;
   imgHeight?: string;
 }
 
-const ProductCard = ({
-  product,
-  w_full,
-  Icon,
-  imgHeight,
-}: NewProductCardProps) => {
+const ProductCard = ({ product, Icon, imgHeight }: NewProductCardProps) => {
   const [heartActive, setHeartActive] = useState(false);
   const [active, setActive] = useState(0);
   const [images, setImages] = useState(product?.subProducts[active]?.images);
@@ -56,7 +52,7 @@ const ProductCard = ({
     );
   }, [active, product?.subProducts]);
 
-  const { addToCart } = useCart();
+  const { loadingItems, addToCart } = useCart();
 
   const handleWishList = () => {
     setHeartActive((prev) => !prev);
@@ -76,13 +72,8 @@ const ProductCard = ({
     : null;
 
   return (
-    <div
-      className={cn(
-        "w-full shadow-sm rounded-md border border-border",
-        !w_full && "sm:w-1/2 md:w-1/3 lg:w-1/4"
-      )}
-    >
-      <div className="relative h-full text-center transition-all duration-1000 ease-in-out">
+    <>
+      <div className="w-full shadow-sm rounded-md border border-border hover:border-secondary-foreground/60 relative h-full text-center duration-300 hover:scale-[1.01]">
         <div className="min-h-0 relative overflow-hidden">
           {/* --------------- IMAGE --------------- */}
           <Link
@@ -114,10 +105,10 @@ const ProductCard = ({
         </div>
 
         {/* PRODUCT INFO */}
-        <div className="text-left text-primary-color relative bg-muted">
+        <div className="text-left text-primary-color relative bg-muted rounded-md">
           <div className="p-4">
             <Link href={`/product/${product?.slug}?style=${active}`}>
-              <div className="mb-2 text-lg font-normal block cursor-pointer h-[56px]">
+              <div className="mb-2 text-lg font-normal block cursor-pointer h-[56px] text-ellipsis line-clamp-2">
                 {productName}
               </div>
             </Link>
@@ -169,17 +160,21 @@ const ProductCard = ({
               full
               icon
               className="bg-accent text-accent-foreground hover:bg-accent/95"
-              onClick={() =>
-                addToCart(product?.subProducts[active]?.id)
-              }
+              onClick={() => addToCart(product?.subProducts[active]?.id)}
             >
-              {Icon && <Icon />}
-              Add To Cart
+              {loadingItems.includes(product?.subProducts[active]?.id) ? (
+                <ScaleLoader color="#ffffff" width={15} height={15} />
+              ) : (
+                <>
+                  {Icon && <Icon />}
+                  Add To Cart
+                </>
+              )}
             </Button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
