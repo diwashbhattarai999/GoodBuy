@@ -116,7 +116,7 @@ const CheckoutSuccess = () => {
             <p className="text-2xl font-semibold">
               {pidx ? "Processing payment..." : "Confirming Order"}
             </p>
-            <ScaleLoader color="#178731" />
+            <ScaleLoader color="#282f2b" />
           </div>
         </div>
       )}

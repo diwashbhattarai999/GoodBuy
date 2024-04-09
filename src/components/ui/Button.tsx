@@ -39,7 +39,7 @@ const Button = ({
       {...props}
       disabled={disabled}
     >
-      {loader && <ScaleLoader color="#178731" width={15} height={15} />}
+      {loader && <ScaleLoader color="#282f2b" width={15} height={15} />}
       {children}
     </button>
   );
