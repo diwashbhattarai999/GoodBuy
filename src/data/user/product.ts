@@ -1,55 +1,128 @@
+import { Prisma } from "@prisma/client";
+
 import { db } from "@/lib/db";
-import {
-  Category,
-  Image,
-  Product,
-  ProductDetail,
-  Question,
-  Review,
-  Size,
-  Style,
-  SubCategory,
-  SubProduct,
-} from "@prisma/client";
 
-export interface GetProductBySlugSubProductType extends SubProduct {
-  sizes: Size[];
-  images: Image[];
-  color: Style;
-  description_images: Image[];
-}
+const subProductInclude = Prisma.validator<Prisma.SubProductInclude>()({
+  sizes: true,
+  images: true,
+  color: true,
+  description_images: true,
+});
 
-export interface GetProductBySlugType extends Product {
-  category: Category;
-  subCategories: SubCategory[];
-  reviews: Review[];
-  subProducts: GetProductBySlugSubProductType[];
-  details: ProductDetail[];
-  questions: Question[];
-}
+const productInclude = Prisma.validator<Prisma.ProductInclude>()({
+  category: true,
+  subCategories: true,
+  reviews: true,
+  details: true,
+  questions: true,
+  subProducts: {
+    include: subProductInclude
+  },
+});
 
+
+
+export type TGetProductBySlugSubProduct = Prisma.SubProductGetPayload<{
+  include: typeof subProductInclude
+}>;
+
+// Type for Get Product By Slug && Get All Products
+export type TGetProduct = Prisma.ProductGetPayload<{
+  include: typeof productInclude;
+}>;
+
+// Type for Get Product By Category Slug
+export type TGetProductByCategorySlug = Prisma.CategoryGetPayload<{
+  include: {
+    Product: {
+      include: typeof productInclude;
+    };
+  };
+}>;
+
+// Type for Get Product By SubCategory Slug
+export type TGetProductBySubcategorySlug = Prisma.SubCategoryGetPayload<{
+  include: {
+    Product: {
+      include: typeof productInclude;
+    };
+  };
+}>;
+
+// Get Product By Slug
 export const getProductBySlug = async (slug: string) => {
   try {
-    const product: GetProductBySlugType | null = await db.product.findUnique({
+    const product: TGetProduct | null = await db.product.findUnique({
       where: { slug },
-      include: {
-        category: true,
-        subCategories: true,
-        reviews: true,
-        details: true,
-        questions: true,
-        subProducts: {
-          include: {
-            sizes: true,
-            images: true,
-            color: true,
-            description_images: true,
-          },
-        },
-      },
+      include: productInclude,
     });
 
     return product;
+  } catch (error) {
+    return null;
+  }
+};
+
+// Get Product By Category Slug
+export const getProductByCategorySlug = async (slug: string) => {
+  try {
+    const categoriesWithProducts: TGetProductByCategorySlug[] =
+      await db.category.findMany({
+        where: { slug },
+        include: {
+          Product: {
+            include: productInclude,
+          },
+        },
+      });
+
+    if (!categoriesWithProducts) return null;
+
+    // Map each category's Product array to extract just the Product part
+    const products: TGetProduct[] = categoriesWithProducts.flatMap(
+      (category) => category.Product
+    );
+
+    return products;
+  } catch (error) {
+    return null;
+  }
+};
+
+// Get Product By SubCategory Slug
+export const getProductBySubcategorySlug = async (slug: string) => {
+  try {
+    const subCategoriesWithProducts: TGetProductBySubcategorySlug[] =
+      await db.subCategory.findMany({
+        where: { slug },
+        include: {
+          Product: {
+            include: productInclude,
+          },
+        },
+      });
+
+    if (!subCategoriesWithProducts) return null;
+
+    // Map each category's Product array to extract just the Product part
+    const products: (TGetProduct | null)[] = subCategoriesWithProducts.flatMap(
+      (category) => category.Product
+    );
+
+    return products;
+  } catch (error) {
+    return null;
+  }
+};
+
+// Get All Products
+export const getAllProducts = async () => {
+  try {
+    const products: TGetProduct[] = await db.product.findMany({
+      include: productInclude,
+    });
+
+    return products;
   } catch (error) {
     return null;
   }

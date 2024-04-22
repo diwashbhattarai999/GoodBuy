@@ -11,6 +11,7 @@ import {
   FaShoppingBasket,
 } from "react-icons/fa";
 import { IconType } from "react-icons";
+import Link from "next/link";
 
 interface ICategoriesProps {
   categories:
@@ -43,8 +44,10 @@ const Categories = ({ categories }: ICategoriesProps) => {
                 key={category.id}
                 className="py-8 border border-secondary-foreground rounded-md cursor-pointer text-primary-foreground hover:bg-accent hover:text-accent-foreground duration-300 flex flex-col items-center gap-2 hover:scale-110"
               >
-                <Icon className="w-10 h-10" />
-                {category.name}
+                <Link href={`/category/${category.slug}`}>
+                  <Icon className="w-10 h-10" />
+                  {category.name}
+                </Link>
               </li>
             );
           })}

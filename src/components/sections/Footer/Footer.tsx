@@ -34,7 +34,7 @@ const Footer = () => {
           <div className="flex items-center justify-center gap-4 mt-4">
             <p>All Rights Reserved &copy; 2024</p>
             <p>
-              Developed By <span className="text-accent">Diwash Bhattarai</span>
+              Developed By <span className="text-primary">Diwash Bhattarai</span>
             </p>
           </div>
         </Container>

@@ -1,8 +1,8 @@
 import { Image, Size, Style } from "@prisma/client";
 
 import {
-  GetProductBySlugSubProductType,
-  GetProductBySlugType,
+  TGetProduct,
+  TGetProductBySlugSubProduct,
   getProductBySlug,
 } from "@/data/user/product";
 
@@ -53,8 +53,8 @@ export default async function ProductPage({
   const style = searchParams.style || 0;
   const size = searchParams?.size || 0;
 
-  let product: GetProductBySlugType | null;
-  let subProduct: GetProductBySlugSubProductType | undefined;
+  let product: TGetProduct | null;
+  let subProduct: TGetProductBySlugSubProduct | undefined;
   let prices: number[] | undefined;
   let newProduct: CustomProductType | undefined = undefined;
 

@@ -96,8 +96,7 @@ const Cart = () => {
           />
           <p>Cart is Empty</p>
 
-          {/* // TODO: add link to all products  */}
-          <Link href="/">
+          <Link href="/category">
             <Button>Browse products</Button>
           </Link>
         </div>
